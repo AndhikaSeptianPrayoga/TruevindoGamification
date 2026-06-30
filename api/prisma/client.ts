@@ -11,19 +11,18 @@ export function getPrismaClient() {
   }
 
   if (!process.env.DATABASE_URL) {
+    console.error('[prisma] DATABASE_URL is not set in the environment — cannot initialize Prisma Client.')
     globalThis.__truevindoPrisma__ = null
     return null
   }
 
   try {
     const prisma = new PrismaClient()
-
-    if (process.env.NODE_ENV !== 'production') {
-      globalThis.__truevindoPrisma__ = prisma
-    }
-
+    // Cache the client in every environment so a single instance is reused.
+    globalThis.__truevindoPrisma__ = prisma
     return prisma
-  } catch {
+  } catch (error) {
+    console.error('[prisma] Failed to initialize Prisma Client:', error)
     globalThis.__truevindoPrisma__ = null
     return null
   }
