@@ -1,0 +1,20 @@
+# Render.com Blueprint — deploys the whole app (frontend + API + Socket.IO)
+# as a single free Web Service. See DEPLOYMENT.md for step-by-step instructions.
+services:
+  - type: web
+    name: truevindo-games
+    runtime: node
+    plan: free
+    # --include=dev forces dev tools (vite, prisma, etc.) to install even though
+    # NODE_ENV=production, so the build can run.
+    buildCommand: npm install --include=dev && npm run prisma:generate && npx vite build
+    startCommand: npm start
+    healthCheckPath: /api/health
+    envVars:
+      - key: NODE_ENV
+        value: production
+      # Set these two in the Render dashboard (marked sync:false = secret/manual):
+      - key: DATABASE_URL
+        sync: false
+      - key: APP_URL
+        sync: false
