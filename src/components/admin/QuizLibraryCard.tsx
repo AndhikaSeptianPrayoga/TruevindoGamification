@@ -20,27 +20,27 @@ export function QuizLibraryCard({
   const isPublished = quiz.status === 'published'
 
   return (
-    <div className="grid gap-4 rounded-[32px] border border-white/10 bg-white/5 p-6 lg:grid-cols-[1fr_auto]">
+    <div className="panel-elevated grid gap-4 p-6 lg:grid-cols-[1fr_auto]">
       <div>
         <div className="flex flex-wrap items-center gap-3">
-          <span className="rounded-full border border-white/10 px-3 py-1 text-xs uppercase tracking-[0.2em] text-slate-300">
+          <span className="pill-tag">
             {quiz.status}
           </span>
-          <span className="text-xs uppercase tracking-[0.2em] text-slate-400">
+          <span className="text-xs uppercase tracking-[0.2em] text-slate-500">
             {quiz.questionCount} questions
           </span>
-          <span className="text-xs uppercase tracking-[0.2em] text-slate-500">
+          <span className="text-xs uppercase tracking-[0.2em] text-slate-400">
             Updated {new Date(quiz.updatedAt).toLocaleTimeString('en-US')}
           </span>
         </div>
-        <h2 className="mt-4 font-display text-3xl font-semibold text-white">{quiz.title}</h2>
-        <p className="mt-3 max-w-3xl text-sm leading-7 text-slate-300">{quiz.description}</p>
+        <h2 className="mt-4 font-display text-3xl font-semibold text-slate-950">{quiz.title}</h2>
+        <p className="mt-3 max-w-3xl text-sm leading-7 text-slate-600">{quiz.description}</p>
       </div>
 
       <div className="grid gap-3 lg:w-56">
         <Link
           to={`/admin/quizzes/${quiz.id}/edit`}
-          className="flex items-center justify-center gap-2 rounded-[24px] border border-white/10 px-4 py-3 text-center text-sm font-semibold text-white transition hover:bg-white/10"
+          className="brand-button-secondary"
         >
           <Edit3 className="h-4 w-4" />
           <span>Edit Quiz</span>
@@ -48,7 +48,7 @@ export function QuizLibraryCard({
 
         <Link
           to={`/admin/sessions/new/lobby?quizId=${quiz.id}`}
-          className="flex items-center justify-center gap-2 rounded-[24px] bg-white px-4 py-3 text-center text-sm font-semibold text-ink transition hover:bg-slate-100"
+          className="brand-button-primary"
         >
           <Play className="h-4 w-4" />
           <span>Host Session</span>
@@ -58,7 +58,7 @@ export function QuizLibraryCard({
           type="button"
           disabled={isBusy}
           onClick={() => onPublishToggle(quiz)}
-          className="flex items-center justify-center gap-2 rounded-[24px] border border-accent/30 px-4 py-3 text-sm font-semibold text-white transition hover:bg-accent/10 disabled:cursor-not-allowed disabled:opacity-50"
+          className="brand-button-ghost disabled:cursor-not-allowed disabled:opacity-50"
         >
           <Send className="h-4 w-4" />
           <span>{isPublished ? 'Unpublish' : 'Publish'}</span>
@@ -68,7 +68,7 @@ export function QuizLibraryCard({
           type="button"
           disabled={isBusy}
           onClick={() => onDuplicate(quiz)}
-          className="flex items-center justify-center gap-2 rounded-[24px] border border-white/10 px-4 py-3 text-sm font-semibold text-slate-200 transition hover:bg-white/10 disabled:cursor-not-allowed disabled:opacity-50"
+          className="brand-button-ghost disabled:cursor-not-allowed disabled:opacity-50"
         >
           <Copy className="h-4 w-4" />
           <span>Duplicate</span>
@@ -78,7 +78,7 @@ export function QuizLibraryCard({
           type="button"
           disabled={isBusy}
           onClick={() => onDelete(quiz)}
-          className="flex items-center justify-center gap-2 rounded-[24px] border border-red-400/20 px-4 py-3 text-sm font-semibold text-red-100 transition hover:bg-red-500/10 disabled:cursor-not-allowed disabled:opacity-50"
+          className="brand-button-danger disabled:cursor-not-allowed disabled:opacity-50"
         >
           <Trash2 className="h-4 w-4" />
           <span>Delete</span>

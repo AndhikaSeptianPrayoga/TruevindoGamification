@@ -69,10 +69,10 @@ export default function PlayPage() {
     return (
       <AppShell
         eyebrow="Gameplay"
-        title="No question is active yet."
-        description="Open a live session from the host screen, or use the simulation link to preview the result view."
+        title="Belum ada pertanyaan yang aktif."
+        description="Buka sesi live dari layar host terlebih dulu, lalu peserta akan masuk otomatis saat pertanyaan dimulai."
       >
-        <Link to="/" className="text-sm text-white underline underline-offset-4">
+        <Link to="/" className="text-sm text-slate-700 underline underline-offset-4">
           Back to join screen
         </Link>
       </AppShell>
@@ -109,7 +109,7 @@ export default function PlayPage() {
     <AppShell
       eyebrow="Live Question"
       title={activeQuestion.text}
-      description="Pick one answer before the countdown ends. The server keeps the master timer so every device stays in sync."
+      description="Pilih satu jawaban sebelum countdown berakhir. Timer utama dikendalikan server agar semua perangkat tetap sinkron."
       aside={
         <div className="grid grid-cols-2 gap-3">
           <StatCard label="Time" value={formatRemainingTime(countdown.remainingMs)} />
@@ -123,7 +123,7 @@ export default function PlayPage() {
       <div className="grid gap-6 lg:grid-cols-[1fr_0.38fr]">
         <section className="space-y-4">
           {activeQuestion.imageUrl ? (
-            <div className="overflow-hidden rounded-[32px] border border-white/10 bg-white/5">
+            <div className="panel-elevated overflow-hidden">
               <img
                 src={activeQuestion.imageUrl}
                 alt={activeQuestion.text}
@@ -149,12 +149,12 @@ export default function PlayPage() {
         </section>
 
         <section className="space-y-4">
-          <div className="rounded-[28px] border border-white/10 bg-white/5 p-5">
-            <div className="flex items-center justify-between text-sm text-slate-300">
+          <div className="panel-elevated p-5">
+            <div className="flex items-center justify-between text-sm text-slate-600">
               <span>Timer sync</span>
               <span>{countdown.progress}%</span>
             </div>
-            <div className="mt-4 h-3 overflow-hidden rounded-full bg-white/10">
+            <div className="mt-4 h-3 overflow-hidden rounded-full bg-slate-200/80">
               <div
                 className="h-full rounded-full bg-gradient-to-r from-accent to-signal"
                 style={{ width: `${countdown.progress}%` }}
@@ -162,9 +162,9 @@ export default function PlayPage() {
             </div>
           </div>
 
-          <div className="rounded-[28px] border border-white/10 bg-white/5 p-5 text-sm leading-7 text-slate-300">
+          <div className="panel-elevated p-5 text-sm leading-7 text-slate-600">
             <p>Participant ID: {participantId ?? 'guest-mode'}</p>
-            <p>Your response is stored locally before the server acknowledgement is sent.</p>
+            <p>Respons disimpan secara lokal terlebih dulu sebelum server mengirim konfirmasi.</p>
           </div>
         </section>
       </div>

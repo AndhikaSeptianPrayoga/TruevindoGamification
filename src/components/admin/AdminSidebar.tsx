@@ -17,12 +17,12 @@ export function AdminSidebar() {
   }
 
   return (
-    <aside className="rounded-[28px] border border-white/10 bg-ink/85 p-4 backdrop-blur">
-      <div className="mb-6 border-b border-white/10 pb-4">
-        <p className="text-xs uppercase tracking-[0.35em] text-accent">Truevindo</p>
-        <h2 className="mt-2 font-display text-2xl font-semibold text-white">Control Room</h2>
-        <p className="mt-3 text-sm text-slate-300">{user?.fullName ?? 'Admin Session'}</p>
-        <p className="text-xs uppercase tracking-[0.2em] text-slate-500">{user?.email}</p>
+    <aside className="panel-elevated p-4">
+      <div className="mb-6 border-b border-slate-200 pb-4">
+        <p className="kicker text-accent">Truevindo Games</p>
+        <h2 className="mt-2 font-display text-2xl font-semibold text-slate-950">Control Room</h2>
+        <p className="mt-3 text-sm text-slate-600">{user?.fullName ?? 'Admin Session'}</p>
+        <p className="text-xs uppercase tracking-[0.2em] text-slate-400">{user?.email}</p>
       </div>
       <nav className="space-y-2">
         {items.map(({ to, label, icon: Icon }) => {
@@ -33,7 +33,9 @@ export function AdminSidebar() {
               key={to}
               to={to}
               className={`flex items-center gap-3 rounded-2xl px-4 py-3 text-sm transition ${
-                active ? 'bg-white text-ink' : 'text-slate-300 hover:bg-white/10 hover:text-white'
+                active
+                  ? 'bg-slate-950 text-white shadow-[0_16px_34px_rgba(15,23,42,0.18)]'
+                  : 'text-slate-600 hover:bg-white hover:text-slate-950'
               }`}
             >
               <Icon className="h-4 w-4" />
@@ -45,7 +47,7 @@ export function AdminSidebar() {
       <button
         type="button"
         onClick={handleLogout}
-        className="mt-6 flex w-full items-center justify-center gap-3 rounded-2xl border border-white/10 px-4 py-3 text-sm font-semibold text-slate-300 transition hover:bg-white/10 hover:text-white"
+        className="brand-button-ghost mt-6 flex w-full"
       >
         <LogOut className="h-4 w-4" />
         <span>Logout Admin</span>

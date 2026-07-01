@@ -24,36 +24,36 @@ export function QuizMetadataForm({
   onStatusChange,
 }: QuizMetadataFormProps) {
   return (
-    <section className="rounded-[32px] border border-white/10 bg-white/5 p-6">
-      <p className="text-xs uppercase tracking-[0.25em] text-slate-400">Quiz Metadata</p>
+    <section className="panel-elevated p-6">
+      <p className="kicker">Quiz Metadata</p>
       <div className="mt-5 grid gap-5">
         <div>
-          <label className="mb-2 block text-xs uppercase tracking-[0.2em] text-slate-400">
-            Quiz Title
+          <label className="mb-2 block text-xs uppercase tracking-[0.2em] text-slate-500">
+            Judul Quiz
           </label>
           <input
             value={title}
             onChange={(event) => onTitleChange(event.target.value)}
-            className="w-full rounded-3xl border border-white/10 bg-ink/80 px-5 py-4 text-white outline-none transition focus:border-accent"
-            placeholder="e.g. Annual Townhall Challenge"
+            className="brand-input"
+            placeholder="Contoh: DIGICON 2026 Corporate Challenge"
           />
         </div>
 
         <div>
-          <label className="mb-2 block text-xs uppercase tracking-[0.2em] text-slate-400">
-            Description
+          <label className="mb-2 block text-xs uppercase tracking-[0.2em] text-slate-500">
+            Deskripsi
           </label>
           <textarea
             value={description}
             onChange={(event) => onDescriptionChange(event.target.value)}
             rows={5}
-            className="w-full rounded-3xl border border-white/10 bg-ink/80 px-5 py-4 text-white outline-none transition focus:border-accent"
-            placeholder="Describe the event context, audience, and quiz goal."
+            className="brand-input"
+            placeholder="Jelaskan konteks acara, target peserta, dan tujuan quiz."
           />
         </div>
 
         <div>
-          <label className="mb-2 block text-xs uppercase tracking-[0.2em] text-slate-400">
+          <label className="mb-2 block text-xs uppercase tracking-[0.2em] text-slate-500">
             Status
           </label>
           <div className="grid gap-3 sm:grid-cols-3">
@@ -64,8 +64,8 @@ export function QuizMetadataForm({
                 onClick={() => onStatusChange(item)}
                 className={`rounded-2xl border px-4 py-3 text-sm font-semibold capitalize transition ${
                   item === status
-                    ? 'border-accent/40 bg-accent/10 text-white'
-                    : 'border-white/10 bg-black/15 text-slate-300 hover:bg-white/10 hover:text-white'
+                    ? 'border-signal/20 bg-slate-950 text-white shadow-[0_16px_34px_rgba(15,23,42,0.18)]'
+                    : 'border-slate-200 bg-white text-slate-700 hover:border-slate-300 hover:bg-slate-50'
                 }`}
               >
                 {item}
@@ -75,13 +75,13 @@ export function QuizMetadataForm({
         </div>
 
         <div className="grid gap-3 sm:grid-cols-2">
-          <div className="rounded-2xl border border-white/10 bg-black/15 p-4">
-            <p className="text-xs uppercase tracking-[0.2em] text-slate-400">Total Questions</p>
-            <p className="mt-2 font-display text-2xl font-semibold text-white">{questionCount}</p>
+          <div className="metric-tile">
+            <p className="text-xs uppercase tracking-[0.2em] text-slate-500">Total Questions</p>
+            <p className="mt-2 font-display text-2xl font-semibold text-slate-950">{questionCount}</p>
           </div>
-          <div className="rounded-2xl border border-white/10 bg-black/15 p-4">
-            <p className="text-xs uppercase tracking-[0.2em] text-slate-400">Participant History</p>
-            <p className="mt-2 font-display text-2xl font-semibold text-white">{participantCount}</p>
+          <div className="metric-tile">
+            <p className="text-xs uppercase tracking-[0.2em] text-slate-500">Participant History</p>
+            <p className="mt-2 font-display text-2xl font-semibold text-slate-950">{participantCount}</p>
           </div>
         </div>
       </div>

@@ -59,12 +59,12 @@ export default function ResultPage() {
       eyebrow="Question Result"
       title={
         isUnanswered
-          ? 'Time is up for this question.'
+          ? 'Waktu untuk pertanyaan ini sudah habis.'
           : isCorrect
-            ? 'Your answer is correct!'
-            : 'Not quite right this time.'
+            ? 'Jawaban Anda benar.'
+            : 'Jawaban Anda belum tepat.'
       }
-      description="Once all answers are in or the timer ends, the system shows your answer status and updates your leaderboard position in sync."
+      description="Saat semua jawaban masuk atau waktu habis, sistem menampilkan status jawaban Anda dan memperbarui posisi leaderboard secara sinkron."
       aside={
         <div className="grid grid-cols-2 gap-3">
           <StatCard label="Question Score" value={formatScore(result?.scoreAwarded ?? 0)} />
@@ -74,49 +74,49 @@ export default function ResultPage() {
     >
       <div className="mx-auto max-w-2xl">
         <section
-          className={`animate-pop-in rounded-[32px] border p-8 text-center ${
+          className={`animate-pop-in rounded-[32px] border p-8 text-center shadow-panel ${
             isCorrect
-              ? 'border-accent/40 bg-accent/10'
-              : 'border-highlight/40 bg-highlight/10'
+              ? 'border-signal/15 bg-white/88'
+              : 'border-accent/15 bg-white/88'
           }`}
         >
-          <div className="mx-auto flex h-20 w-20 items-center justify-center rounded-full bg-white/10">
+          <div className="mx-auto flex h-20 w-20 items-center justify-center rounded-full bg-slate-950">
             {isCorrect ? (
-              <CheckCircle2 className="h-12 w-12 text-accent" />
+              <CheckCircle2 className="h-12 w-12 text-white" />
             ) : (
-              <XCircle className="h-12 w-12 text-highlight" />
+              <XCircle className="h-12 w-12 text-white" />
             )}
           </div>
-          <p className="mt-6 text-xs uppercase tracking-[0.25em] text-slate-400">Evaluation Status</p>
-          <p className="mt-2 font-display text-3xl font-semibold text-white">
-            {isUnanswered ? 'No Answer Submitted' : isCorrect ? 'Correct Answer' : 'Need Improvement'}
+          <p className="mt-6 text-xs uppercase tracking-[0.25em] text-slate-500">Evaluation Status</p>
+          <p className="mt-2 font-display text-3xl font-semibold text-slate-950">
+            {isUnanswered ? 'Tidak Ada Jawaban' : isCorrect ? 'Jawaban Benar' : 'Perlu Ditingkatkan'}
           </p>
 
-          <div className="mt-6 grid gap-3 text-left text-sm leading-7 text-slate-300 sm:grid-cols-2">
-            <div className="rounded-2xl border border-white/10 bg-black/20 px-4 py-3">
-              <span className="text-xs uppercase tracking-[0.2em] text-slate-400">Your pick</span>
-              <p className="mt-1 text-lg font-semibold text-white">{result?.selectedOption ?? '—'}</p>
+          <div className="mt-6 grid gap-3 text-left text-sm leading-7 text-slate-600 sm:grid-cols-2">
+            <div className="list-item-soft">
+              <span className="text-xs uppercase tracking-[0.2em] text-slate-500">Your pick</span>
+              <p className="mt-1 text-lg font-semibold text-slate-950">{result?.selectedOption ?? '—'}</p>
             </div>
-            <div className="rounded-2xl border border-white/10 bg-black/20 px-4 py-3">
-              <span className="text-xs uppercase tracking-[0.2em] text-slate-400">Correct answer</span>
-              <p className="mt-1 text-lg font-semibold text-white">{result?.correctOption ?? '—'}</p>
+            <div className="list-item-soft">
+              <span className="text-xs uppercase tracking-[0.2em] text-slate-500">Correct answer</span>
+              <p className="mt-1 text-lg font-semibold text-slate-950">{result?.correctOption ?? '—'}</p>
             </div>
-            <div className="rounded-2xl border border-white/10 bg-black/20 px-4 py-3">
-              <span className="text-xs uppercase tracking-[0.2em] text-slate-400">Points earned</span>
-              <p className="mt-1 text-lg font-semibold text-white">
+            <div className="list-item-soft">
+              <span className="text-xs uppercase tracking-[0.2em] text-slate-500">Points earned</span>
+              <p className="mt-1 text-lg font-semibold text-slate-950">
                 +{formatScore(result?.scoreAwarded ?? 0)}
               </p>
             </div>
-            <div className="rounded-2xl border border-white/10 bg-black/20 px-4 py-3">
-              <span className="text-xs uppercase tracking-[0.2em] text-slate-400">Current rank</span>
-              <p className="mt-1 text-lg font-semibold text-white">
+            <div className="list-item-soft">
+              <span className="text-xs uppercase tracking-[0.2em] text-slate-500">Current rank</span>
+              <p className="mt-1 text-lg font-semibold text-slate-950">
                 #{result?.rankAfterAnswer ?? '—'}
               </p>
             </div>
           </div>
 
-          <p className="mt-6 text-sm text-slate-400">
-            Hang tight — waiting for the host to move on to the next question or close the session.
+          <p className="mt-6 text-sm text-slate-500">
+            Tunggu host memindahkan sesi ke pertanyaan berikutnya atau ke penutupan acara.
           </p>
         </section>
       </div>

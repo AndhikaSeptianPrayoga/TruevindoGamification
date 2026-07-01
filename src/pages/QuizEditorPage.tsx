@@ -49,7 +49,7 @@ export default function QuizEditorPage() {
         }
       } catch {
         setDraft(null)
-        setNotice('The quiz draft could not be loaded yet.')
+        setNotice('Draft quiz belum dapat dimuat.')
       } finally {
         setIsLoading(false)
       }
@@ -67,22 +67,22 @@ export default function QuizEditorPage() {
     try {
       const saved = await saveQuizDetail(draft.id, draft)
       markSaved(saved)
-      setNotice('Quiz draft saved successfully.')
+      setNotice('Draft quiz berhasil disimpan.')
     } catch (saveError) {
-      setNotice(saveError instanceof Error ? saveError.message : 'Failed to save the quiz draft.')
+      setNotice(saveError instanceof Error ? saveError.message : 'Draft quiz gagal disimpan.')
     }
   }
 
   return (
     <AppShell
       eyebrow="Quiz Builder"
-      title="A quiz editor structured for 4 options and a per-question duration."
-      description="The Quiz Builder can now edit metadata, add questions, set up 4 options, choose the correct answer, and save the draft to the backend."
+      title="Quiz builder profesional untuk menyusun pengalaman live yang rapi, cepat, dan siap tampil di event."
+      description="Editor ini mendukung metadata quiz, gambar pendukung, 4 opsi jawaban, durasi per pertanyaan, serta alur penyimpanan draft yang lebih sesuai untuk operasional event korporat."
       aside={<AdminSidebar />}
     >
       {isLoading && !isNewDraft ? (
-        <div className="rounded-[32px] border border-white/10 bg-white/5 p-8 text-sm uppercase tracking-[0.25em] text-slate-300">
-          Preparing the quiz builder...
+        <div className="panel-elevated p-8 text-sm uppercase tracking-[0.25em] text-slate-500">
+          Menyiapkan quiz builder...
         </div>
       ) : null}
 
@@ -100,16 +100,16 @@ export default function QuizEditorPage() {
             onStatusChange={setStatus}
           />
 
-          <section className="rounded-[32px] border border-white/10 bg-white/5 p-6">
+          <section className="panel-elevated p-6">
             <div className="flex flex-wrap items-center justify-between gap-4">
               <div>
-                <p className="text-xs uppercase tracking-[0.25em] text-slate-400">Draft Status</p>
-                <p className="mt-2 text-sm text-slate-300">
-                  {notice || (isDirty ? 'You have unsaved changes.' : 'Draft is in sync with the backend.')}
+                <p className="kicker">Draft Status</p>
+                <p className="mt-2 text-sm text-slate-600">
+                  {notice || (isDirty ? 'Masih ada perubahan yang belum disimpan.' : 'Draft sudah sinkron dengan backend.')}
                 </p>
                 {lastSavedAt ? (
-                  <p className="mt-2 text-xs uppercase tracking-[0.2em] text-slate-500">
-                    Last save {new Date(lastSavedAt).toLocaleTimeString('en-US')}
+                  <p className="mt-2 text-xs uppercase tracking-[0.2em] text-slate-400">
+                    Last save {new Date(lastSavedAt).toLocaleTimeString('id-ID')}
                   </p>
                 ) : null}
               </div>
@@ -117,30 +117,31 @@ export default function QuizEditorPage() {
                 type="button"
                 onClick={handleSave}
                 disabled={!draft || isSaving}
-                className="flex items-center gap-3 rounded-3xl bg-white px-5 py-4 text-sm font-semibold text-ink transition hover:bg-slate-100 disabled:cursor-not-allowed disabled:opacity-50"
+                className="brand-button-primary disabled:cursor-not-allowed disabled:opacity-50"
               >
                 <Save className="h-4 w-4" />
-                <span>{isSaving ? 'Saving...' : 'Save Draft'}</span>
+                <span>{isSaving ? 'Menyimpan...' : 'Simpan Draft'}</span>
               </button>
             </div>
           </section>
         </div>
 
-        <section className="rounded-[32px] border border-white/10 bg-white/5 p-6">
+        <section className="panel-elevated p-6">
           <div className="flex flex-wrap items-center justify-between gap-4">
             <div>
-              <p className="text-xs uppercase tracking-[0.25em] text-slate-400">Question Builder</p>
-              <p className="mt-2 text-sm text-slate-300">
-                Each question supports 4 options, its own duration, and a correct-answer selection.
+              <p className="kicker">Question Builder</p>
+              <p className="mt-2 text-sm text-slate-600">
+                Setiap pertanyaan mendukung 4 opsi, durasi tersendiri, pemilihan jawaban benar,
+                dan gambar pendukung agar tampil lebih kuat di layar event.
               </p>
             </div>
             <button
               type="button"
               onClick={addQuestion}
-              className="flex items-center gap-3 rounded-3xl border border-white/10 px-5 py-4 text-sm font-semibold text-white transition hover:bg-white/10"
+              className="brand-button-secondary"
             >
               <Plus className="h-4 w-4" />
-              <span>Add Question</span>
+              <span>Tambah Pertanyaan</span>
             </button>
           </div>
 

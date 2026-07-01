@@ -58,7 +58,7 @@ export default function HostLivePage() {
     <AppShell
       eyebrow="Host Live"
       title={question?.text ?? 'The active question will appear here.'}
-      description="The live screen shows the active question, the running timer, and how many answers have come in before the admin moves to the results."
+      description="Layar live menampilkan pertanyaan aktif, timer utama, dan progres jawaban peserta sebelum admin berpindah ke hasil."
       aside={<AdminSidebar />}
     >
       <div className="grid gap-6 xl:grid-cols-[1.15fr_0.85fr]">
@@ -81,10 +81,10 @@ export default function HostLivePage() {
             />
           </div>
 
-          <div className="rounded-[32px] border border-white/10 bg-white/5 p-6">
-            <p className="text-xs uppercase tracking-[0.25em] text-slate-400">Active Question</p>
+          <div className="panel-elevated p-6">
+            <p className="kicker">Active Question</p>
             {question?.imageUrl ? (
-              <div className="mt-5 overflow-hidden rounded-[28px] border border-white/10 bg-black/15">
+              <div className="mt-5 overflow-hidden rounded-[28px] border border-slate-200 bg-white">
                 <img
                   src={question.imageUrl}
                   alt={question.text}
@@ -97,38 +97,38 @@ export default function HostLivePage() {
                 ? Object.entries(question.options).map(([option, text]) => (
                     <div
                       key={option}
-                      className="rounded-[28px] border border-white/10 bg-black/15 p-5 text-white"
+                      className="list-item-soft"
                     >
-                      <p className="text-xs uppercase tracking-[0.2em] text-slate-400">{option}</p>
-                      <p className="mt-3 text-base leading-7">{text}</p>
+                      <p className="text-xs uppercase tracking-[0.2em] text-slate-500">{option}</p>
+                      <p className="mt-3 text-base leading-7 text-slate-900">{text}</p>
                     </div>
                   ))
                 : null}
             </div>
           </div>
 
-          <div className="rounded-[28px] border border-white/10 bg-black/15 p-5">
-            <div className="flex items-center justify-between text-sm text-slate-300">
+          <div className="panel-elevated p-5">
+            <div className="flex items-center justify-between text-sm text-slate-600">
               <span>Question progress</span>
               <span>{countdown.progress}%</span>
             </div>
-            <div className="mt-4 h-3 overflow-hidden rounded-full bg-white/10">
+            <div className="mt-4 h-3 overflow-hidden rounded-full bg-slate-200/80">
               <div
                 className="h-full rounded-full bg-gradient-to-r from-accent to-signal"
                 style={{ width: `${countdown.progress}%` }}
               />
             </div>
-            <p className="mt-4 text-sm leading-7 text-slate-300">
+            <p className="mt-4 text-sm leading-7 text-slate-600">
               {everyoneAnswered
-                ? 'Everyone has answered. Move to the results to show the summary for this round.'
-                : 'Keep an eye on incoming answers. When ready, move to the results for this round.'}
+                ? 'Semua peserta sudah menjawab. Lanjutkan ke hasil untuk menampilkan ringkasan ronde ini.'
+                : 'Pantau jawaban yang masuk. Saat siap, lanjutkan ke hasil untuk ronde ini.'}
             </p>
           </div>
 
           <button
             type="button"
             onClick={() => void handleOpenResults()}
-            className="w-full rounded-[24px] bg-white px-4 py-4 text-sm font-semibold text-ink transition hover:bg-slate-100"
+            className="brand-button-primary w-full"
           >
             Next: Answer Results
           </button>

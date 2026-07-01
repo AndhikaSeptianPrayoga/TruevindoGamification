@@ -60,19 +60,19 @@ export default function HostSummaryPage() {
   return (
     <AppShell
       eyebrow="Round Summary"
-      title="This round's answer results and the latest leaderboard positions."
-      description="Once the results are shown, the admin simply moves on to the next question, or jumps straight to the podium when all questions are done."
+      title="Hasil jawaban ronde ini dan posisi leaderboard terbaru."
+      description="Setelah hasil ditampilkan, admin cukup melanjutkan ke pertanyaan berikutnya atau otomatis menuju podium saat semua pertanyaan selesai."
       aside={<AdminSidebar />}
     >
       <div className="grid gap-6 xl:grid-cols-[0.95fr_1.05fr]">
         <AnswerDistributionChart data={session?.answerDistribution ?? []} />
         <LiveLeaderboard participants={session?.leaderboard ?? []} />
       </div>
-      <div className="mt-6 flex flex-wrap gap-3">
+      <div className="mt-6 flex flex-wrap justify-center gap-3">
         <button
           type="button"
           onClick={() => void handleNextStage()}
-          className="rounded-[24px] bg-white px-4 py-4 text-sm font-semibold text-ink transition hover:bg-slate-100"
+          className="brand-button-primary min-w-64"
         >
           {isLastQuestion ? 'Next: Podium' : 'Next: Following Question'}
         </button>

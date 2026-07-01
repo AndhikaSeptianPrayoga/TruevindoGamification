@@ -79,22 +79,22 @@ export default function HostLobbyPage() {
   return (
     <AppShell
       eyebrow="Host Lobby"
-      title="Host waiting room to get participants ready before the quiz begins."
-      description="Use this screen to share the PIN, make sure participants have joined, then start the first question once everyone is ready."
+      title="Waiting room host yang rapi untuk menyiapkan peserta sebelum quiz dimulai."
+      description="Bagikan PIN atau QR, pastikan peserta sudah masuk, lalu mulai pertanyaan pertama saat ruangan siap. Alurnya dibuat linear agar operator event mudah mengendalikan sesi."
       aside={<AdminSidebar />}
     >
       {notice ? (
-        <div className="mb-4 rounded-[28px] border border-white/10 bg-white/5 px-5 py-4 text-sm text-slate-200">
+        <div className="panel-elevated mb-4 px-5 py-4 text-sm text-slate-600">
           {notice}
         </div>
       ) : null}
       <div className="grid gap-6 xl:grid-cols-[0.72fr_1.28fr]">
-        <section className="rounded-[32px] border border-white/10 bg-white/5 p-6">
-          <p className="text-xs uppercase tracking-[0.25em] text-slate-400">Join Access</p>
-          <p className="mt-3 font-display text-6xl font-semibold tracking-[0.18em] text-white">
+        <section className="panel-elevated p-6">
+          <p className="kicker">Join Access</p>
+          <p className="mt-3 font-display text-6xl font-semibold tracking-[0.18em] text-slate-950">
             {activeSession?.pinCode ?? '482913'}
           </p>
-          <div className="mt-6 flex justify-center rounded-[28px] border border-white/10 bg-white p-5">
+          <div className="mt-6 flex justify-center rounded-[28px] border border-slate-200 bg-white p-5">
             <QRCodeSVG value={qrValue} size={210} />
           </div>
           <div className="mt-6 grid grid-cols-2 gap-3">
@@ -104,16 +104,16 @@ export default function HostLobbyPage() {
         </section>
 
         <section className="space-y-4">
-          <div className="rounded-[32px] border border-white/10 bg-white/5 p-6">
-            <p className="text-xs uppercase tracking-[0.25em] text-slate-400">Joined Participants</p>
-            <h2 className="mt-3 font-display text-3xl font-semibold text-white">
+          <div className="panel-elevated p-6">
+            <p className="kicker">Joined Participants</p>
+            <h2 className="mt-3 font-display text-3xl font-semibold text-slate-950">
               {activeSession?.quizTitle ?? 'Loading host session...'}
             </h2>
             <div className="mt-5 grid gap-3 md:grid-cols-2">
               {activeSession?.participants.map((participant) => (
                 <div
                   key={participant.id}
-                  className="rounded-2xl border border-white/10 bg-black/15 px-4 py-3 text-sm text-white"
+                  className="list-item-soft text-sm text-slate-900"
                 >
                   {participant.displayName}
                 </div>
@@ -126,7 +126,7 @@ export default function HostLobbyPage() {
               type="button"
               onClick={() => void handleStartQuiz()}
               disabled={isStarting}
-              className="rounded-[24px] bg-white px-4 py-4 text-center text-sm font-semibold text-ink transition hover:bg-slate-100 disabled:cursor-not-allowed disabled:opacity-50"
+              className="brand-button-primary w-full disabled:cursor-not-allowed disabled:opacity-50"
             >
               {isStarting ? 'Starting Quiz...' : 'Start Quiz'}
             </button>

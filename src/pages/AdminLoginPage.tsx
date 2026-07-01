@@ -40,34 +40,34 @@ export default function AdminLoginPage() {
   return (
     <AppShell
       eyebrow="Admin Access"
-      title="Sign in to the Truevindo Games Control Room."
-      description="The admin dashboard is used to manage the question bank, create live sessions, display the waiting room, and control the leaderboard throughout the event."
+      title="Masuk ke Truevindo Games Control Room."
+      description="Dashboard admin digunakan untuk mengelola bank soal, membuka sesi live, menampilkan waiting room, dan mengontrol leaderboard selama event berlangsung."
     >
-      <div className="mx-auto max-w-xl rounded-[32px] border border-white/10 bg-white/5 p-6">
+      <div className="panel-elevated mx-auto max-w-xl p-6">
         <div className="space-y-5">
           <div>
-            <label className="mb-2 block text-xs uppercase tracking-[0.25em] text-slate-400">
+            <label className="mb-2 block text-xs uppercase tracking-[0.25em] text-slate-500">
               Email
             </label>
             <input
               value={email}
               onChange={(event) => setEmail(event.target.value)}
-              className="w-full rounded-3xl border border-white/10 bg-ink/80 px-5 py-4 text-white outline-none focus:border-accent"
+              className="brand-input"
             />
           </div>
           <div>
-            <label className="mb-2 block text-xs uppercase tracking-[0.25em] text-slate-400">
+            <label className="mb-2 block text-xs uppercase tracking-[0.25em] text-slate-500">
               Password
             </label>
             <input
               type="password"
               value={password}
               onChange={(event) => setPassword(event.target.value)}
-              className="w-full rounded-3xl border border-white/10 bg-ink/80 px-5 py-4 text-white outline-none focus:border-accent"
+              className="brand-input"
             />
           </div>
           {error ? (
-            <div className="rounded-3xl border border-red-400/30 bg-red-500/10 px-4 py-3 text-sm text-red-100">
+            <div className="rounded-3xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
               {error}
             </div>
           ) : null}
@@ -75,11 +75,11 @@ export default function AdminLoginPage() {
             type="button"
             onClick={handleLogin}
             disabled={isLoading || !email || !password}
-            className="w-full rounded-3xl bg-white px-5 py-4 text-sm font-semibold text-ink transition hover:bg-slate-100 disabled:opacity-50"
+            className="brand-button-primary w-full disabled:opacity-50"
           >
             {isLoading ? 'Loading...' : 'Sign in to Dashboard'}
           </button>
-          <p className="text-xs leading-6 text-slate-400">
+          <p className="text-xs leading-6 text-slate-500">
             Default demo credentials: `admin@truevindo.games` / `demo-password`
           </p>
         </div>

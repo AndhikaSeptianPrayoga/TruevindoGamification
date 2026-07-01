@@ -66,30 +66,30 @@ export function QuizQuestionEditorCard({
   }
 
   return (
-    <div className="rounded-[28px] border border-white/10 bg-black/15 p-5">
+    <div className="panel-soft p-5">
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div>
-          <p className="font-display text-xl font-semibold text-white">Question {question.orderNo}</p>
-          <p className="mt-1 text-xs uppercase tracking-[0.2em] text-slate-400">
+          <p className="font-display text-xl font-semibold text-slate-950">Question {question.orderNo}</p>
+          <p className="mt-1 text-xs uppercase tracking-[0.2em] text-slate-500">
             Corporate Multiple Choice
           </p>
         </div>
         <div className="flex items-center gap-3">
-          <div className="flex items-center gap-3 rounded-2xl border border-white/10 bg-white/5 px-3 py-2">
-            <span className="text-xs uppercase tracking-[0.2em] text-slate-400">Duration</span>
+          <div className="flex items-center gap-3 rounded-2xl border border-slate-200 bg-white px-3 py-2">
+            <span className="text-xs uppercase tracking-[0.2em] text-slate-500">Duration</span>
             <input
               type="number"
               min={5}
               value={question.durationSeconds}
               onChange={(event) => onDurationChange(question.id, Number(event.target.value))}
-              className="w-20 bg-transparent text-right text-sm font-semibold text-white outline-none"
+              className="w-20 bg-transparent text-right text-sm font-semibold text-slate-950 outline-none"
             />
           </div>
           <button
             type="button"
             disabled={!canRemove}
             onClick={() => onRemove(question.id)}
-            className="rounded-2xl border border-white/10 p-3 text-slate-300 transition hover:bg-white/10 hover:text-white disabled:cursor-not-allowed disabled:opacity-40"
+            className="rounded-2xl border border-slate-200 p-3 text-slate-500 transition hover:border-red-200 hover:bg-red-50 hover:text-red-600 disabled:cursor-not-allowed disabled:opacity-40"
           >
             <Trash2 className="h-4 w-4" />
           </button>
@@ -97,21 +97,21 @@ export function QuizQuestionEditorCard({
       </div>
 
       <div className="mt-5">
-        <label className="mb-2 block text-xs uppercase tracking-[0.2em] text-slate-400">
-          Question
+        <label className="mb-2 block text-xs uppercase tracking-[0.2em] text-slate-500">
+          Pertanyaan
         </label>
         <textarea
           value={question.text}
           rows={3}
           onChange={(event) => onQuestionTextChange(question.id, event.target.value)}
-          className="w-full rounded-3xl border border-white/10 bg-ink/80 px-5 py-4 text-white outline-none transition focus:border-accent"
-          placeholder="Write the question for participants."
+          className="brand-input"
+          placeholder="Tulis pertanyaan untuk peserta."
         />
       </div>
 
       <div className="mt-5">
-        <label className="mb-2 block text-xs uppercase tracking-[0.2em] text-slate-400">
-          Inline Image
+        <label className="mb-2 block text-xs uppercase tracking-[0.2em] text-slate-500">
+          Gambar Pendukung
         </label>
         <div className="flex flex-wrap gap-2">
           <button
@@ -122,8 +122,8 @@ export function QuizQuestionEditorCard({
             }}
             className={`flex items-center gap-2 rounded-full px-4 py-2 text-xs font-semibold uppercase tracking-[0.2em] transition ${
               imageInputMode === 'link'
-                ? 'bg-white text-ink'
-                : 'border border-white/10 text-slate-300 hover:bg-white/10 hover:text-white'
+                ? 'bg-slate-950 text-white'
+                : 'border border-slate-200 bg-white text-slate-600 hover:border-slate-300 hover:bg-slate-50'
             }`}
           >
             <Link2 className="h-4 w-4" />
@@ -137,8 +137,8 @@ export function QuizQuestionEditorCard({
             }}
             className={`flex items-center gap-2 rounded-full px-4 py-2 text-xs font-semibold uppercase tracking-[0.2em] transition ${
               imageInputMode === 'upload'
-                ? 'bg-white text-ink'
-                : 'border border-white/10 text-slate-300 hover:bg-white/10 hover:text-white'
+                ? 'bg-slate-950 text-white'
+                : 'border border-slate-200 bg-white text-slate-600 hover:border-slate-300 hover:bg-slate-50'
             }`}
           >
             <Upload className="h-4 w-4" />
@@ -148,7 +148,7 @@ export function QuizQuestionEditorCard({
             <button
               type="button"
               onClick={handleClearImage}
-              className="flex items-center gap-2 rounded-full border border-red-400/20 px-4 py-2 text-xs font-semibold uppercase tracking-[0.2em] text-red-100 transition hover:bg-red-500/10"
+              className="flex items-center gap-2 rounded-full border border-red-200 bg-red-50 px-4 py-2 text-xs font-semibold uppercase tracking-[0.2em] text-red-600 transition hover:bg-red-100"
             >
               <X className="h-4 w-4" />
               <span>Remove</span>
@@ -161,16 +161,16 @@ export function QuizQuestionEditorCard({
             type="url"
             value={question.imageUrl ?? ''}
             onChange={(event) => onQuestionImageUrlChange(question.id, event.target.value)}
-            className="mt-4 w-full rounded-3xl border border-white/10 bg-ink/80 px-5 py-4 text-sm text-white outline-none transition focus:border-accent"
-            placeholder="Paste an image URL for this question."
+            className="brand-input mt-4 text-sm"
+            placeholder="Tempel URL gambar untuk pertanyaan ini."
           />
         ) : (
-          <div className="mt-4 rounded-[28px] border border-dashed border-white/10 bg-ink/40 p-5">
-            <label className="flex cursor-pointer flex-col items-center justify-center gap-3 rounded-[24px] border border-white/10 bg-white/5 px-5 py-8 text-center transition hover:bg-white/10">
-              <Upload className="h-5 w-5 text-white" />
-              <span className="text-sm font-semibold text-white">Choose an image from your device</span>
-              <span className="text-xs uppercase tracking-[0.2em] text-slate-400">
-                JPG, PNG, WEBP up to 4 MB
+          <div className="mt-4 rounded-[28px] border border-dashed border-slate-300 bg-slate-50 p-5">
+            <label className="flex cursor-pointer flex-col items-center justify-center gap-3 rounded-[24px] border border-slate-200 bg-white px-5 py-8 text-center transition hover:border-slate-300 hover:bg-slate-50">
+              <Upload className="h-5 w-5 text-slate-900" />
+              <span className="text-sm font-semibold text-slate-950">Pilih gambar dari perangkat</span>
+              <span className="text-xs uppercase tracking-[0.2em] text-slate-500">
+                JPG, PNG, WEBP hingga 4 MB
               </span>
               <input
                 type="file"
@@ -183,10 +183,10 @@ export function QuizQuestionEditorCard({
         )}
 
         {imageNotice ? (
-          <p className="mt-3 text-xs uppercase tracking-[0.2em] text-slate-400">{imageNotice}</p>
+          <p className="mt-3 text-xs uppercase tracking-[0.2em] text-slate-500">{imageNotice}</p>
         ) : null}
         {question.imageUrl ? (
-          <div className="mt-4 overflow-hidden rounded-[28px] border border-white/10 bg-ink/60">
+          <div className="mt-4 overflow-hidden rounded-[28px] border border-slate-200 bg-white">
             <img
               src={question.imageUrl}
               alt={`Question ${question.orderNo} preview`}
@@ -204,18 +204,20 @@ export function QuizQuestionEditorCard({
             <div
               key={option}
               className={`rounded-3xl border p-4 transition ${
-                active ? 'border-accent/40 bg-accent/10' : 'border-white/10 bg-white/5'
+                active ? 'border-signal/20 bg-slate-950 text-white' : 'border-slate-200 bg-white'
               }`}
             >
               <div className="flex items-center justify-between gap-3">
-                <p className="font-display text-lg font-semibold text-white">{option}</p>
+                <p className={`font-display text-lg font-semibold ${active ? 'text-white' : 'text-slate-950'}`}>
+                  {option}
+                </p>
                 <button
                   type="button"
                   onClick={() => onCorrectOptionChange(question.id, option)}
                   className={`rounded-full px-3 py-1 text-xs font-semibold uppercase tracking-[0.2em] transition ${
                     active
-                      ? 'bg-white text-ink'
-                      : 'border border-white/10 text-slate-300 hover:bg-white/10 hover:text-white'
+                      ? 'bg-white text-slate-950'
+                      : 'border border-slate-200 text-slate-600 hover:border-slate-300 hover:bg-slate-50'
                   }`}
                 >
                   {active ? 'Correct' : 'Set Key'}
@@ -225,8 +227,12 @@ export function QuizQuestionEditorCard({
                 value={value}
                 rows={3}
                 onChange={(event) => onOptionChange(question.id, option, event.target.value)}
-                className="mt-3 w-full rounded-2xl border border-white/10 bg-ink/70 px-4 py-3 text-sm text-white outline-none transition focus:border-accent"
-                placeholder={`Fill in option ${option}`}
+                className={`mt-3 w-full rounded-2xl border px-4 py-3 text-sm outline-none transition ${
+                  active
+                    ? 'border-white/15 bg-white/10 text-white placeholder:text-white/55'
+                    : 'border-slate-200 bg-slate-50 text-slate-900 placeholder:text-slate-400'
+                }`}
+                placeholder={`Isi opsi ${option}`}
               />
             </div>
           )

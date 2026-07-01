@@ -14,9 +14,14 @@ export default function QuizListPage() {
   const [notice, setNotice] = useState('')
   const [busyQuizId, setBusyQuizId] = useState<string | null>(null)
   const [isCreatingDraft, setIsCreatingDraft] = useState(false)
+  const [isLoading, setIsLoading] = useState(true)
 
   useEffect(() => {
-    getQuizzes().then(setQuizzes).catch(() => undefined)
+    setIsLoading(true)
+    getQuizzes()
+      .then(setQuizzes)
+      .catch(() => undefined)
+      .finally(() => setIsLoading(false))
   }, [setQuizzes])
 
   async function refreshList(message?: string) {
@@ -84,12 +89,12 @@ export default function QuizListPage() {
   return (
     <AppShell
       eyebrow="Admin Dashboard"
-      title="Quiz library for corporate events and internal activations."
-      description="The Quiz Library now supports operational actions to publish, duplicate, delete, and host — bringing the dashboard closer to a real control room."
+      title="Quiz library bergaya control room premium untuk operasional event korporat."
+      description="Dari sini admin bisa menyiapkan draft, mempublikasikan quiz, menduplikasi konten, dan langsung membuka sesi live dengan tampilan yang lebih profesional dan mudah dipahami."
       aside={<AdminSidebar />}
     >
       {notice ? (
-        <div className="mb-4 rounded-[28px] border border-white/10 bg-white/5 px-5 py-4 text-sm text-slate-200">
+        <div className="panel-elevated mb-4 px-5 py-4 text-sm text-slate-600">
           {notice}
         </div>
       ) : null}
@@ -98,24 +103,41 @@ export default function QuizListPage() {
           type="button"
           onClick={() => void handleCreateQuiz()}
           disabled={isCreatingDraft}
-          className="flex items-center gap-3 rounded-[24px] bg-white px-5 py-4 text-sm font-semibold text-ink transition hover:bg-slate-100 disabled:cursor-not-allowed disabled:opacity-50"
+          className="brand-button-primary disabled:cursor-not-allowed disabled:opacity-50"
         >
           <Plus className="h-4 w-4" />
           <span>{isCreatingDraft ? 'Preparing Draft...' : 'Create New Quiz'}</span>
         </button>
       </div>
-      <div className="grid gap-4">
-        {quizzes.map((quiz) => (
-          <QuizLibraryCard
-            key={quiz.id}
-            quiz={quiz}
-            isBusy={busyQuizId === quiz.id}
-            onPublishToggle={handlePublishToggle}
-            onDuplicate={handleDuplicate}
-            onDelete={handleDelete}
-          />
-        ))}
-      </div>
+      {isLoading ? (
+        <div className="grid gap-4">
+          {Array.from({ length: 3 }).map((_, index) => (
+            <div key={index} className="panel-elevated animate-pulse p-6">
+              <div className="h-4 w-32 rounded-full bg-slate-200" />
+              <div className="mt-5 h-10 w-2/3 rounded-2xl bg-slate-200" />
+              <div className="mt-4 h-4 w-full rounded-full bg-slate-100" />
+              <div className="mt-2 h-4 w-4/5 rounded-full bg-slate-100" />
+              <div className="mt-6 grid gap-3 lg:w-56">
+                <div className="h-12 rounded-[24px] bg-slate-100" />
+                <div className="h-12 rounded-[24px] bg-slate-100" />
+              </div>
+            </div>
+          ))}
+        </div>
+      ) : (
+        <div className="grid gap-4">
+          {quizzes.map((quiz) => (
+            <QuizLibraryCard
+              key={quiz.id}
+              quiz={quiz}
+              isBusy={busyQuizId === quiz.id}
+              onPublishToggle={handlePublishToggle}
+              onDuplicate={handleDuplicate}
+              onDelete={handleDelete}
+            />
+          ))}
+        </div>
+      )}
     </AppShell>
   )
 }
