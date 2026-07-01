@@ -359,9 +359,15 @@ class SessionService {
 
   submitAnswer(payload: SubmitAnswerPayload): SubmitAnswerResponse {
     const base = this.getSessionOrThrow(payload.sessionId)
-    const questionId = base.activeQuestion?.questionId
+    // Accept answers for the CURRENT question by index, and allow a short grace
+    // once the round has just flipped to results — so an answer sent right at
+    // the deadline still counts instead of being rejected on a timing race.
+    const quiz = this.quizCache.get(base.quizId)
+    const currentQuestionId =
+      base.activeQuestion?.questionId ?? quiz?.questions[base.currentQuestionIndex]?.id
+    const acceptable = base.status === 'question_live' || base.status === 'question_result'
 
-    if (!questionId || questionId !== payload.questionId) {
+    if (!currentQuestionId || currentQuestionId !== payload.questionId || !acceptable) {
       throw new Error('Soal aktif tidak sesuai dengan jawaban yang dikirim')
     }
 

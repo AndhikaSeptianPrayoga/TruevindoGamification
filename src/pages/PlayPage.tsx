@@ -10,6 +10,7 @@ import { useSessionSocket } from '@/hooks/useSessionSocket'
 import { useParticipantStore } from '@/stores/useParticipantStore'
 import { getPlayerState } from '@/utils/api'
 import { formatRemainingTime } from '@/utils/format'
+import { deriveParticipantResult } from '@/utils/result'
 import { formatScore } from '@/utils/score'
 import { sound } from '@/utils/sound'
 
@@ -42,9 +43,17 @@ export default function PlayPage() {
     onState: setSessionState,
     onQuestionResult: (state) => {
       setSessionState(state)
+      // Rebuild the result straight from this authoritative reveal broadcast so
+      // it is never lost to the answer-ack race. Read the freshest answer from
+      // the store to avoid a stale closure.
+      const { lastAnswer, participantId: pid } = useParticipantStore.getState()
+      const derived = deriveParticipantResult(state, lastAnswer, pid)
+      if (derived) {
+        setLatestResult(derived)
+      }
       // Don't navigate away mid-submit: handleSubmit will navigate once it has
       // the participant result. Navigating here would unmount + disconnect the
-      // socket before the answer acknowledgement arrives, losing the result.
+      // socket before the answer acknowledgement arrives.
       if (submittingRef.current) {
         return
       }
@@ -161,11 +170,11 @@ export default function PlayPage() {
         new Promise<null>((resolve) => setTimeout(() => resolve(null), 4000)),
       ]).catch(() => null)
 
-      if (response) {
-        setSessionState(response.sessionState)
-        if (response.participantResult) {
-          setLatestResult(response.participantResult)
-        }
+      // Prefer the ack's exact result when present, but never overwrite the
+      // live session state here — incoming broadcasts (with the revealed answer)
+      // are newer than the ack's snapshot.
+      if (response?.participantResult) {
+        setLatestResult(response.participantResult)
       }
       // Brief beat so the "locked in" confirmation and checkmark are visible.
       await new Promise((resolve) => setTimeout(resolve, 450))
