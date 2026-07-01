@@ -213,7 +213,9 @@ export function QuizQuestionEditorCard({
             <div
               key={option}
               className={`rounded-3xl border p-4 transition ${
-                active ? 'border-signal/20 bg-slate-950 text-white' : 'border-slate-200 bg-white'
+                active
+                  ? 'border-emerald-300 bg-gradient-to-br from-emerald-600 via-emerald-700 to-emerald-800 text-white shadow-[0_22px_52px_rgba(5,150,105,0.22)]'
+                  : 'border-slate-200 bg-white'
               }`}
             >
               <div className="flex items-center justify-between gap-3">
@@ -225,7 +227,7 @@ export function QuizQuestionEditorCard({
                   onClick={() => onCorrectOptionChange(question.id, option)}
                   className={`rounded-full px-3 py-1 text-xs font-semibold uppercase tracking-[0.2em] transition ${
                     active
-                      ? 'bg-white text-slate-950'
+                      ? 'bg-emerald-50 text-emerald-700 shadow-[inset_0_0_0_1px_rgba(16,185,129,0.15)]'
                       : 'border border-slate-200 text-slate-600 hover:border-slate-300 hover:bg-slate-50'
                   }`}
                 >
@@ -238,7 +240,7 @@ export function QuizQuestionEditorCard({
                 onChange={(event) => onOptionChange(question.id, option, event.target.value)}
                 className={`mt-3 w-full rounded-2xl border px-4 py-3 text-sm outline-none transition ${
                   active
-                    ? 'border-white/15 bg-white/10 text-white placeholder:text-white/55'
+                    ? 'border-white/20 bg-emerald-950/22 text-white placeholder:text-emerald-100/70'
                     : 'border-slate-200 bg-slate-50 text-slate-900 placeholder:text-slate-400'
                 }`}
                 placeholder={`Fill in option ${option}`}
