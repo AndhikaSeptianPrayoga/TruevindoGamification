@@ -114,6 +114,17 @@ export const sound = {
     }
   },
 
+  /** Short haptic buzz on supported devices (independent of the mute toggle). */
+  vibrate(pattern: number | number[]) {
+    if (typeof navigator !== 'undefined' && typeof navigator.vibrate === 'function') {
+      try {
+        navigator.vibrate(pattern)
+      } catch {
+        // Vibration not allowed / unavailable — ignore.
+      }
+    }
+  },
+
   /** Soft tap when an answer option is selected. */
   select() {
     withContext((ctx) => {

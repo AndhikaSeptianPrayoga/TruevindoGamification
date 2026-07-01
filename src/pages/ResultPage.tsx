@@ -1,8 +1,9 @@
-import { CheckCircle2, XCircle } from 'lucide-react'
+import { CheckCircle2, Flame, XCircle } from 'lucide-react'
 import { useEffect, useRef } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { AppShell } from '@/components/common/AppShell'
 import { StatCard } from '@/components/common/StatCard'
+import { useCountUp } from '@/hooks/useCountUp'
 import { useSessionSocket } from '@/hooks/useSessionSocket'
 import { useParticipantStore } from '@/stores/useParticipantStore'
 import { formatScore } from '@/utils/score'
@@ -11,28 +12,31 @@ import { sound } from '@/utils/sound'
 export default function ResultPage() {
   const navigate = useNavigate()
   const { sessionId = 'session-truevindo-001' } = useParams()
-  const { latestResult, sessionState, setSessionState } = useParticipantStore()
+  const { latestResult, participantId, sessionState, setSessionState } = useParticipantStore()
   const result = latestResult
   const leadingParticipant = sessionState?.leaderboard[0]
+  const me = sessionState?.leaderboard.find((participant) => participant.id === participantId)
+  const streak = me?.streak ?? 0
 
   const isUnanswered = !result
   const isCorrect = result?.isCorrect ?? false
   const resultTone = isUnanswered ? 'warning' : isCorrect ? 'success' : 'danger'
+  const animatedPoints = useCountUp(isCorrect ? result?.scoreAwarded ?? 0 : 0)
   const playedRef = useRef<string | null>(null)
 
-  // Play a correct/wrong cue once per evaluated question.
+  // Play a correct/wrong cue (plus a matching haptic) once per evaluated question.
   useEffect(() => {
     const key = result?.questionId ?? 'unanswered'
     if (playedRef.current === key) {
       return
     }
     playedRef.current = key
-    if (isUnanswered) {
-      sound.wrong()
-    } else if (isCorrect) {
+    if (isCorrect) {
       sound.correct()
+      sound.vibrate([0, 35, 45, 35])
     } else {
       sound.wrong()
+      sound.vibrate(140)
     }
   }, [isCorrect, isUnanswered, result?.questionId])
 
@@ -102,6 +106,20 @@ export default function ResultPage() {
           <p className="mt-2 font-display text-3xl font-semibold text-slate-950">
             {isUnanswered ? 'No Answer Submitted' : isCorrect ? 'Correct Answer' : 'Incorrect Answer'}
           </p>
+
+          {isCorrect ? (
+            <div className="mt-4 flex flex-col items-center gap-3">
+              <p className="font-display text-5xl font-bold tabular-nums text-green-700">
+                +{formatScore(animatedPoints)}
+              </p>
+              {streak >= 2 ? (
+                <span className="animate-pop-in inline-flex items-center gap-1.5 rounded-full bg-amber-500/15 px-4 py-1.5 text-sm font-semibold text-amber-700">
+                  <Flame className="h-4 w-4" />
+                  {streak} in a row
+                </span>
+              ) : null}
+            </div>
+          ) : null}
 
           <div className="mt-6 grid gap-3 text-left text-sm leading-7 text-slate-600 sm:grid-cols-2">
             <div className="list-item-soft">
