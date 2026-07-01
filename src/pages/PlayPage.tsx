@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { useEffect, useMemo, useRef } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 import type { AnswerOption } from '@shared/types/game'
 import { AppShell } from '@/components/common/AppShell'
@@ -21,15 +21,16 @@ export default function PlayPage() {
     sessionState,
     selectedOption,
     setLatestResult,
+    setLastAnswer,
     setSelectedOption,
     setSessionState,
   } = useParticipantStore()
 
+  const status = sessionState?.status
   const activeQuestion = sessionState?.activeQuestion
   const countdown = useCountdown(activeQuestion?.deadlineAt ?? null, activeQuestion?.durationSeconds ?? 20)
   const lastTickRef = useRef<number>(Number.POSITIVE_INFINITY)
   const submittingRef = useRef(false)
-  const [showCountdown, setShowCountdown] = useState(false)
   const secondsLeft = Math.max(0, Math.ceil(countdown.remainingMs / 1000))
   const me = useMemo(
     () => sessionState?.leaderboard.find((participant) => participant.id === participantId) ?? null,
@@ -59,27 +60,36 @@ export default function PlayPage() {
     }
   }, [sessionId, sessionState, setSessionState])
 
-  // Reset state and show the 3-2-1 standby whenever a new question goes live.
+  // Reset per-question state (and clear any previous result) whenever a new
+  // question goes live, then play a short reveal cue.
   useEffect(() => {
     setSelectedOption(null)
+    setLatestResult(null)
+    setLastAnswer(null)
     lastTickRef.current = Number.POSITIVE_INFINITY
     submittingRef.current = false
     if (activeQuestion?.questionId) {
-      setShowCountdown(true)
+      sound.whoosh()
     }
-  }, [activeQuestion?.questionId, setSelectedOption])
+  }, [activeQuestion?.questionId, setLastAnswer, setLatestResult, setSelectedOption])
 
   // Gentle tick during the final five seconds to build tension.
   useEffect(() => {
     if (selectedOption) {
       return
     }
-    const secondsLeft = Math.ceil(countdown.remainingMs / 1000)
-    if (secondsLeft > 0 && secondsLeft <= 5 && secondsLeft < lastTickRef.current) {
-      lastTickRef.current = secondsLeft
+    const remaining = Math.ceil(countdown.remainingMs / 1000)
+    if (remaining > 0 && remaining <= 5 && remaining < lastTickRef.current) {
+      lastTickRef.current = remaining
       sound.tick()
     }
   }, [countdown.remainingMs, selectedOption])
+
+  // Server-driven 3-2-1 standby before the first question — synchronized for
+  // everyone, and the question timer only starts once it finishes.
+  if (status === 'countdown') {
+    return <CountdownOverlay />
+  }
 
   if (!sessionState || !activeQuestion) {
     return (
@@ -105,6 +115,14 @@ export default function PlayPage() {
     setSelectedOption(option)
 
     if (participantId && activeQuestion) {
+      // Record the answer locally so the result can be rebuilt even if the
+      // server acknowledgement is ever lost (safety net for the result screen).
+      setLastAnswer({
+        questionId: activeQuestion.questionId,
+        selectedOption: option,
+        scoreBefore: me?.score ?? 0,
+      })
+
       // Measure the real response time from when the question went live so the
       // server can award more points for faster answers.
       const durationMs = Math.max(activeQuestion.durationSeconds ?? 20, 1) * 1000
@@ -138,9 +156,7 @@ export default function PlayPage() {
   }
 
   return (
-    <>
-      {showCountdown ? <CountdownOverlay onDone={() => setShowCountdown(false)} /> : null}
-      <AppShell
+    <AppShell
       eyebrow="Live Question"
       title={activeQuestion.text}
       description="Choose one answer before the countdown ends. The server controls the master timer so every device stays synchronized."
@@ -174,7 +190,7 @@ export default function PlayPage() {
                   option={option}
                   text={text}
                   selected={selectedOption === option}
-                  disabled={Boolean(selectedOption) || showCountdown}
+                  disabled={Boolean(selectedOption)}
                   onClick={() => handleSubmit(option)}
                 />
               ),
@@ -239,7 +255,6 @@ export default function PlayPage() {
           )}
         </section>
       </div>
-      </AppShell>
-    </>
+    </AppShell>
   )
 }

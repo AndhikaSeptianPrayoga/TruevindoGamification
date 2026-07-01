@@ -3,6 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom'
 import { AdminSidebar } from '@/components/admin/AdminSidebar'
 import { AppShell } from '@/components/common/AppShell'
 import { StatCard } from '@/components/common/StatCard'
+import { CountdownOverlay } from '@/components/participant/CountdownOverlay'
 import { LiveLeaderboard } from '@/components/host/LiveLeaderboard'
 import { useCountdown } from '@/hooks/useCountdown'
 import { useSessionSocket } from '@/hooks/useSessionSocket'
@@ -52,6 +53,10 @@ export default function HostLivePage() {
       activeSession?.status === 'question_result' ? activeSession : await advanceHostStage()
 
     navigate(`/admin/sessions/${nextState.sessionId}/summary`)
+  }
+
+  if (activeSession?.status === 'countdown') {
+    return <CountdownOverlay />
   }
 
   return (

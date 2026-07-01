@@ -316,6 +316,12 @@ class SessionService {
     const base = this.getSessionOrThrow(sessionId)
 
     if (base.status === 'waiting') {
+      // Start with a synchronized 3-2-1 standby before the first question goes
+      // live; the gateway drives the timing and then transitions to question_live.
+      return this.advanceStatus(sessionId, 'countdown')
+    }
+
+    if (base.status === 'countdown') {
       return this.advanceStatus(sessionId, 'question_live')
     }
 

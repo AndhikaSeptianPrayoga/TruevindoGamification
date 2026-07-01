@@ -2,8 +2,8 @@ import { useEffect, useRef, useState } from 'react'
 import { sound } from '@/utils/sound'
 
 interface CountdownOverlayProps {
-  /** Called once the 3-2-1-GO sequence finishes. */
-  onDone: () => void
+  /** Optional callback once the 3-2-1-GO sequence finishes. */
+  onDone?: () => void
 }
 
 /**
@@ -29,7 +29,7 @@ export function CountdownOverlay({ onDone }: CountdownOverlayProps) {
       if (step > 0) {
         setStep((current) => current - 1)
       } else {
-        onDoneRef.current()
+        onDoneRef.current?.()
       }
     }, delay)
 

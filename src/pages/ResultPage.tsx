@@ -1,6 +1,7 @@
 import { CheckCircle2, Flame, XCircle } from 'lucide-react'
-import { useEffect, useRef } from 'react'
+import { useEffect, useMemo, useRef } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
+import type { ParticipantAnswerResult } from '@shared/types/game'
 import { AppShell } from '@/components/common/AppShell'
 import { StatCard } from '@/components/common/StatCard'
 import { useCountUp } from '@/hooks/useCountUp'
@@ -12,11 +13,35 @@ import { sound } from '@/utils/sound'
 export default function ResultPage() {
   const navigate = useNavigate()
   const { sessionId = 'session-truevindo-001' } = useParams()
-  const { latestResult, participantId, sessionState, setSessionState } = useParticipantStore()
-  const result = latestResult
+  const { latestResult, lastAnswer, participantId, sessionState, setSessionState } =
+    useParticipantStore()
   const leadingParticipant = sessionState?.leaderboard[0]
   const me = sessionState?.leaderboard.find((participant) => participant.id === participantId)
   const streak = me?.streak ?? 0
+
+  // Safety net: if the server acknowledgement was lost, rebuild the result from
+  // the locally recorded answer plus the revealed correct option, so a real
+  // answer never shows up as "No Answer Submitted".
+  const reconstructed = useMemo<ParticipantAnswerResult | null>(() => {
+    if (latestResult || !lastAnswer) {
+      return null
+    }
+    const correct = sessionState?.answerDistribution.find((item) => item.isCorrect)
+    if (!correct) {
+      return null
+    }
+    const scoreAwarded = Math.max(0, (me?.score ?? lastAnswer.scoreBefore) - lastAnswer.scoreBefore)
+    return {
+      questionId: lastAnswer.questionId,
+      selectedOption: lastAnswer.selectedOption,
+      correctOption: correct.option,
+      isCorrect: lastAnswer.selectedOption === correct.option,
+      scoreAwarded,
+      rankAfterAnswer: me?.rank ?? 1,
+    }
+  }, [latestResult, lastAnswer, sessionState, me])
+
+  const result = latestResult ?? reconstructed
 
   const isUnanswered = !result
   const isCorrect = result?.isCorrect ?? false

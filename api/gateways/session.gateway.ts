@@ -4,6 +4,8 @@ import { sessionService } from '../modules/sessions/session.service.js'
 
 export function registerSessionGateway(io: Server) {
   const roundTimers = new Map<string, NodeJS.Timeout>()
+  // Duration of the 3-2-1-GO standby; must match the client CountdownOverlay.
+  const COUNTDOWN_MS = 3300
 
   function clearRoundTimer(sessionId: string) {
     const timer = roundTimers.get(sessionId)
@@ -16,6 +18,29 @@ export function registerSessionGateway(io: Server) {
 
   function emitSessionState(nextState: ReturnType<typeof sessionService.getStateById>) {
     io.to(nextState.sessionId).emit('session:state', nextState)
+
+    if (nextState.status === 'countdown') {
+      // Start the standby timer exactly once (later session:join re-emits must
+      // not restart it). When it fires, go live with a fresh question deadline
+      // so no answer time is lost during the 3-2-1.
+      if (!roundTimers.has(nextState.sessionId)) {
+        const timer = setTimeout(() => {
+          roundTimers.delete(nextState.sessionId)
+          try {
+            const current = sessionService.getStateById(nextState.sessionId)
+            if (current.status !== 'countdown') {
+              return
+            }
+            const live = sessionService.advanceStatus(nextState.sessionId, 'question_live')
+            emitSessionState(live)
+          } catch {
+            clearRoundTimer(nextState.sessionId)
+          }
+        }, COUNTDOWN_MS)
+        roundTimers.set(nextState.sessionId, timer)
+      }
+      return
+    }
 
     if (nextState.status === 'question_live') {
       io.to(nextState.sessionId).emit('question:start', nextState)
