@@ -81,8 +81,8 @@ export default function HostPodiumPage() {
       {podium.length > 0 ? <Confetti pieces={160} /> : null}
       <AppShell
         eyebrow="Corporate Podium"
-        title="Pemenang sesi live telah ditentukan."
-        description="Podium akhir dirancang tetap meriah untuk layar besar, tetapi tetap terasa elegan dan profesional untuk event korporat."
+        title="The live session winners have been decided."
+        description="The final podium is designed to stay celebratory on a large screen while still feeling elegant, professional, and brand-ready for a corporate event."
         aside={<AdminSidebar />}
       >
         <div className="panel-elevated rounded-[40px] bg-gradient-to-br from-red-50/80 via-white to-blue-50/80 p-6 md:p-10">
@@ -131,7 +131,7 @@ export default function HostPodiumPage() {
             </div>
           ) : (
             <div className="mt-12 rounded-[28px] border border-slate-200 bg-white/80 px-6 py-8 text-center text-sm leading-7 text-slate-600">
-              Belum ada peserta yang terekam pada sesi ini, jadi podium belum bisa ditampilkan.
+              No participants have been recorded for this session yet, so the podium cannot be shown.
             </div>
           )}
 

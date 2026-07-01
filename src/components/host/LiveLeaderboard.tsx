@@ -29,7 +29,7 @@ export function LiveLeaderboard({ participants }: LiveLeaderboardProps) {
               </span>
               <div>
                 <p className="text-sm font-semibold text-slate-950">{participant.displayName}</p>
-                <p className="text-xs uppercase tracking-[0.2em] text-slate-500">
+                <p className="text-xs uppercase tracking-[0.2em] text-slate-600">
                   Streak {participant.streak}
                 </p>
               </div>

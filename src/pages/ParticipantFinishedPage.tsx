@@ -47,10 +47,10 @@ export default function ParticipantFinishedPage() {
   }, [])
 
   const headline = !me
-    ? 'Sesi selesai. Terima kasih sudah bermain.'
+    ? 'That is a wrap. Thanks for playing.'
     : isPodium
-      ? `Luar biasa, Anda finis di posisi #${me.rank}.`
-      : `Kerja bagus, Anda finis di posisi #${me.rank}.`
+      ? `Excellent work. You finished #${me.rank}.`
+      : `Nice work. You finished #${me.rank}.`
 
   return (
     <>
@@ -58,11 +58,11 @@ export default function ParticipantFinishedPage() {
       <AppShell
         eyebrow="Session Completed"
         title={headline}
-        description="Berikut leaderboard akhir sesi. Pengalaman ini dirancang agar penutupan game tetap terasa meriah, profesional, dan layak tampil di layar event."
+        description="Here is the final leaderboard. The closing experience is designed to stay celebratory, polished, and suitable for the main event screen."
         aside={
           <div className="grid grid-cols-2 gap-3">
-            <StatCard label="Peringkat Anda" value={me ? `#${me.rank}` : '—'} />
-            <StatCard label="Skor Anda" value={me ? formatScore(me.score) : '—'} />
+            <StatCard label="Your Rank" value={me ? `#${me.rank}` : '—'} />
+            <StatCard label="Your Score" value={me ? formatScore(me.score) : '—'} />
           </div>
         }
       >
@@ -86,7 +86,7 @@ export default function ParticipantFinishedPage() {
                       <Icon className={`mb-2 h-7 w-7 ${index === 0 ? 'text-accent' : index === 1 ? 'text-slate-600' : 'text-signal'}`} />
                       <p className="mb-2 max-w-full truncate text-center text-sm font-semibold text-slate-950">
                         {entry.displayName}
-                        {isMe ? ' (Anda)' : ''}
+                        {isMe ? ' (You)' : ''}
                       </p>
                       <div
                         className={`flex ${style.height} w-full animate-rise-in flex-col items-center justify-start rounded-t-2xl border ${style.ring} ${style.glow} bg-gradient-to-b from-white to-slate-50 pt-3 shadow-[0_18px_44px_rgba(15,23,42,0.1)]`}
@@ -113,11 +113,11 @@ export default function ParticipantFinishedPage() {
               }`}
             >
               <Sparkles className="h-6 w-6 text-accent" />
-              <p className="text-xs uppercase tracking-[0.25em] text-slate-500">Peringkat Akhir Anda</p>
+              <p className="text-xs uppercase tracking-[0.25em] text-slate-600">Your Final Position</p>
               <p className="font-display text-5xl font-bold text-slate-950">#{me.rank}</p>
               <p className="text-sm text-slate-600">
                 {formatScore(me.score)} pts
-                {leaderboard.length > 0 ? ` · dari ${leaderboard.length} peserta` : ''}
+                {leaderboard.length > 0 ? ` · out of ${leaderboard.length} participants` : ''}
               </p>
             </section>
           ) : null}
@@ -143,7 +143,7 @@ export default function ParticipantFinishedPage() {
                         </span>
                         <span className={`text-sm font-medium ${isMe ? 'text-white' : 'text-slate-950'}`}>
                           {entry.displayName}
-                          {isMe ? ' (Anda)' : ''}
+                          {isMe ? ' (You)' : ''}
                         </span>
                       </div>
                       <span className={`text-sm font-semibold ${isMe ? 'text-white' : 'text-slate-700'}`}>
@@ -161,7 +161,7 @@ export default function ParticipantFinishedPage() {
               to="/"
               className="brand-button-primary"
             >
-              Kembali ke Halaman Awal
+              Back to Home
             </Link>
           </div>
         </div>

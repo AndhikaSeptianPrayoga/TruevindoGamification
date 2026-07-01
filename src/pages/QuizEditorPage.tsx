@@ -49,7 +49,7 @@ export default function QuizEditorPage() {
         }
       } catch {
         setDraft(null)
-        setNotice('Draft quiz belum dapat dimuat.')
+        setNotice('The quiz draft could not be loaded yet.')
       } finally {
         setIsLoading(false)
       }
@@ -67,22 +67,22 @@ export default function QuizEditorPage() {
     try {
       const saved = await saveQuizDetail(draft.id, draft)
       markSaved(saved)
-      setNotice('Draft quiz berhasil disimpan.')
+      setNotice('Quiz draft saved successfully.')
     } catch (saveError) {
-      setNotice(saveError instanceof Error ? saveError.message : 'Draft quiz gagal disimpan.')
+      setNotice(saveError instanceof Error ? saveError.message : 'Failed to save the quiz draft.')
     }
   }
 
   return (
     <AppShell
       eyebrow="Quiz Builder"
-      title="Quiz builder profesional untuk menyusun pengalaman live yang rapi, cepat, dan siap tampil di event."
-      description="Editor ini mendukung metadata quiz, gambar pendukung, 4 opsi jawaban, durasi per pertanyaan, serta alur penyimpanan draft yang lebih sesuai untuk operasional event korporat."
+      title="A professional quiz builder designed for live experiences that feel clear, fast, and event-ready."
+      description="This editor supports quiz metadata, supporting images, four answer options, per-question duration, and a draft-saving flow designed for reliable live event operations."
       aside={<AdminSidebar />}
     >
       {isLoading && !isNewDraft ? (
-        <div className="panel-elevated p-8 text-sm uppercase tracking-[0.25em] text-slate-500">
-          Menyiapkan quiz builder...
+        <div className="panel-elevated p-8 text-sm uppercase tracking-[0.25em] text-slate-600">
+          Preparing the quiz builder...
         </div>
       ) : null}
 
@@ -104,12 +104,12 @@ export default function QuizEditorPage() {
             <div className="flex flex-wrap items-center justify-between gap-4">
               <div>
                 <p className="kicker">Draft Status</p>
-                <p className="mt-2 text-sm text-slate-600">
-                  {notice || (isDirty ? 'Masih ada perubahan yang belum disimpan.' : 'Draft sudah sinkron dengan backend.')}
+                <p className="mt-2 text-sm text-slate-700">
+                  {notice || (isDirty ? 'You have unsaved changes.' : 'The draft is in sync with the backend.')}
                 </p>
                 {lastSavedAt ? (
-                  <p className="mt-2 text-xs uppercase tracking-[0.2em] text-slate-400">
-                    Last save {new Date(lastSavedAt).toLocaleTimeString('id-ID')}
+                  <p className="mt-2 text-xs uppercase tracking-[0.2em] text-slate-500">
+                    Last save {new Date(lastSavedAt).toLocaleTimeString('en-US')}
                   </p>
                 ) : null}
               </div>
@@ -120,7 +120,7 @@ export default function QuizEditorPage() {
                 className="brand-button-primary disabled:cursor-not-allowed disabled:opacity-50"
               >
                 <Save className="h-4 w-4" />
-                <span>{isSaving ? 'Menyimpan...' : 'Simpan Draft'}</span>
+                <span>{isSaving ? 'Saving...' : 'Save Draft'}</span>
               </button>
             </div>
           </section>
@@ -130,9 +130,9 @@ export default function QuizEditorPage() {
           <div className="flex flex-wrap items-center justify-between gap-4">
             <div>
               <p className="kicker">Question Builder</p>
-              <p className="mt-2 text-sm text-slate-600">
-                Setiap pertanyaan mendukung 4 opsi, durasi tersendiri, pemilihan jawaban benar,
-                dan gambar pendukung agar tampil lebih kuat di layar event.
+              <p className="mt-2 text-sm text-slate-700">
+                Each question supports four options, its own duration, correct-answer selection,
+                and a supporting image so the content reads clearly on event screens.
               </p>
             </div>
             <button
@@ -141,7 +141,7 @@ export default function QuizEditorPage() {
               className="brand-button-secondary"
             >
               <Plus className="h-4 w-4" />
-              <span>Tambah Pertanyaan</span>
+              <span>Add Question</span>
             </button>
           </div>
 

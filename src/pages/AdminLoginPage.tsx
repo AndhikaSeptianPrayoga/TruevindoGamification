@@ -40,8 +40,8 @@ export default function AdminLoginPage() {
   return (
     <AppShell
       eyebrow="Admin Access"
-      title="Masuk ke Truevindo Games Control Room."
-      description="Dashboard admin digunakan untuk mengelola bank soal, membuka sesi live, menampilkan waiting room, dan mengontrol leaderboard selama event berlangsung."
+      title="Sign in to the Truevindo Games Control Room."
+      description="The admin dashboard is used to manage the question bank, launch live sessions, display the waiting room, and control the leaderboard throughout the event."
     >
       <div className="panel-elevated mx-auto max-w-xl p-6">
         <div className="space-y-5">
@@ -67,7 +67,7 @@ export default function AdminLoginPage() {
             />
           </div>
           {error ? (
-            <div className="rounded-3xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
+            <div className="notice-danger rounded-3xl px-4 py-3 text-sm">
               {error}
             </div>
           ) : null}

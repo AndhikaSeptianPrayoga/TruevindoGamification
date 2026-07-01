@@ -38,7 +38,7 @@ export function QuizQuestionEditorCard({
     }
 
     if (!file.type.startsWith('image/')) {
-      setImageNotice('The file must be an image.')
+      setImageNotice('The selected file must be an image.')
       return
     }
 
@@ -70,13 +70,13 @@ export function QuizQuestionEditorCard({
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div>
           <p className="font-display text-xl font-semibold text-slate-950">Question {question.orderNo}</p>
-          <p className="mt-1 text-xs uppercase tracking-[0.2em] text-slate-500">
+          <p className="mt-1 text-xs uppercase tracking-[0.2em] text-slate-600">
             Corporate Multiple Choice
           </p>
         </div>
         <div className="flex items-center gap-3">
           <div className="flex items-center gap-3 rounded-2xl border border-slate-200 bg-white px-3 py-2">
-            <span className="text-xs uppercase tracking-[0.2em] text-slate-500">Duration</span>
+            <span className="text-xs uppercase tracking-[0.2em] text-slate-600">Duration</span>
             <input
               type="number"
               min={5}
@@ -97,21 +97,21 @@ export function QuizQuestionEditorCard({
       </div>
 
       <div className="mt-5">
-        <label className="mb-2 block text-xs uppercase tracking-[0.2em] text-slate-500">
-          Pertanyaan
+        <label className="mb-2 block text-xs uppercase tracking-[0.2em] text-slate-600">
+          Question
         </label>
         <textarea
           value={question.text}
           rows={3}
           onChange={(event) => onQuestionTextChange(question.id, event.target.value)}
           className="brand-input"
-          placeholder="Tulis pertanyaan untuk peserta."
+          placeholder="Write the question shown to participants."
         />
       </div>
 
       <div className="mt-5">
-        <label className="mb-2 block text-xs uppercase tracking-[0.2em] text-slate-500">
-          Gambar Pendukung
+        <label className="mb-2 block text-xs uppercase tracking-[0.2em] text-slate-600">
+          Supporting Image
         </label>
         <div className="flex flex-wrap gap-2">
           <button
@@ -148,7 +148,7 @@ export function QuizQuestionEditorCard({
             <button
               type="button"
               onClick={handleClearImage}
-              className="flex items-center gap-2 rounded-full border border-red-200 bg-red-50 px-4 py-2 text-xs font-semibold uppercase tracking-[0.2em] text-red-600 transition hover:bg-red-100"
+              className="status-chip-danger flex items-center gap-2 rounded-full px-4 py-2 text-xs font-semibold uppercase tracking-[0.2em] transition hover:bg-red-100"
             >
               <X className="h-4 w-4" />
               <span>Remove</span>
@@ -162,15 +162,15 @@ export function QuizQuestionEditorCard({
             value={question.imageUrl ?? ''}
             onChange={(event) => onQuestionImageUrlChange(question.id, event.target.value)}
             className="brand-input mt-4 text-sm"
-            placeholder="Tempel URL gambar untuk pertanyaan ini."
+            placeholder="Paste an image URL for this question."
           />
         ) : (
           <div className="mt-4 rounded-[28px] border border-dashed border-slate-300 bg-slate-50 p-5">
             <label className="flex cursor-pointer flex-col items-center justify-center gap-3 rounded-[24px] border border-slate-200 bg-white px-5 py-8 text-center transition hover:border-slate-300 hover:bg-slate-50">
               <Upload className="h-5 w-5 text-slate-900" />
-              <span className="text-sm font-semibold text-slate-950">Pilih gambar dari perangkat</span>
-              <span className="text-xs uppercase tracking-[0.2em] text-slate-500">
-                JPG, PNG, WEBP hingga 4 MB
+              <span className="text-sm font-semibold text-slate-950">Choose an image from your device</span>
+              <span className="text-xs uppercase tracking-[0.2em] text-slate-600">
+                JPG, PNG, WEBP up to 4 MB
               </span>
               <input
                 type="file"
@@ -183,7 +183,7 @@ export function QuizQuestionEditorCard({
         )}
 
         {imageNotice ? (
-          <p className="mt-3 text-xs uppercase tracking-[0.2em] text-slate-500">{imageNotice}</p>
+          <p className="mt-3 text-xs uppercase tracking-[0.2em] text-slate-600">{imageNotice}</p>
         ) : null}
         {question.imageUrl ? (
           <div className="mt-4 overflow-hidden rounded-[28px] border border-slate-200 bg-white">
@@ -232,7 +232,7 @@ export function QuizQuestionEditorCard({
                     ? 'border-white/15 bg-white/10 text-white placeholder:text-white/55'
                     : 'border-slate-200 bg-slate-50 text-slate-900 placeholder:text-slate-400'
                 }`}
-                placeholder={`Isi opsi ${option}`}
+                placeholder={`Fill in option ${option}`}
               />
             </div>
           )

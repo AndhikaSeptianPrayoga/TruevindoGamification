@@ -32,7 +32,7 @@ export function AppShell({
             <h1 className="max-w-3xl font-display text-3xl font-semibold tracking-tight text-slate-950 md:text-5xl">
               {title}
             </h1>
-            <p className="max-w-3xl text-sm leading-7 text-slate-600 md:text-base">{description}</p>
+            <p className="max-w-3xl text-sm leading-7 text-slate-700 md:text-base">{description}</p>
           </div>
           {aside ? <div className="w-full xl:max-w-md">{aside}</div> : null}
         </header>
@@ -43,7 +43,7 @@ export function AppShell({
             <span className="h-8 w-px bg-white/15" aria-hidden />
             <img src={gimflyLogo} alt="Gimfly Studio" className="h-8 w-auto object-contain md:h-10" />
           </div>
-          <p className="text-xs uppercase tracking-[0.25em] text-slate-500">
+          <p className="text-xs uppercase tracking-[0.25em] text-slate-600">
             Future-ready experience by Truevindo &amp; Gimfly Studio
           </p>
         </footer>

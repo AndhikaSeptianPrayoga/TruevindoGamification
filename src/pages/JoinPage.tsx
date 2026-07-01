@@ -37,11 +37,11 @@ export default function JoinPage() {
     <AppShell
       eyebrow="Corporate Quiz Platform"
       title="Live quiz experience with a professional, modern, future-ready event interface."
-      description="Masukkan QUIZ ID dan nama Anda untuk bergabung ke sesi live. Tampilan ini dirancang untuk perangkat mobile, cepat dipahami, dan tetap sinkron secara real time dalam suasana event korporat modern."
+      description="Enter the QUIZ ID and your display name to join the live session. This interface is optimized for mobile devices, easy to understand, and stays in sync throughout a modern corporate event."
       aside={
         <div className="grid gap-3 md:grid-cols-2">
-          <StatCard label="Format" value="Live Quiz" hint="Satu flow sinkron dari host ke peserta" />
-          <StatCard label="Style" value="Future B2B" hint="Bersih, premium, event-ready" />
+          <StatCard label="Format" value="Live Quiz" hint="One synchronized flow from host to participants" />
+          <StatCard label="Style" value="Future B2B" hint="Clean, premium, event-ready" />
         </div>
       }
     >
@@ -49,7 +49,7 @@ export default function JoinPage() {
         <section className="panel-elevated p-6">
           <div className="mb-8 flex items-center gap-3 text-sm text-slate-600">
             <ShieldCheck className="h-4 w-4 text-signal" />
-            <span>Akses peserta cepat tanpa akun permanen</span>
+            <span>Fast participant access with no permanent account required</span>
           </div>
 
           <div className="space-y-5">
@@ -61,30 +61,30 @@ export default function JoinPage() {
                 value={pinCode}
                 onChange={(event) => setPinCode(event.target.value)}
                 className="brand-input text-lg"
-                placeholder="Masukkan PIN sesi"
+                placeholder="Enter the session PIN"
               />
             </div>
             <div>
               <label className="mb-2 block text-xs uppercase tracking-[0.25em] text-slate-500">
-                Nama Tampilan
+                Display Name
               </label>
               <input
                 value={displayName}
                 onChange={(event) => setDisplayName(event.target.value)}
                 className="brand-input text-lg"
-                placeholder="Masukkan nama Anda"
+                placeholder="Enter your name"
               />
             </div>
 
             {error ? (
-              <div className="rounded-2xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
+              <div className="notice-danger rounded-2xl px-4 py-3 text-sm">
                 {error}
               </div>
             ) : null}
 
             {!error ? (
               <p className="text-sm leading-7 text-slate-500">
-                Gunakan PIN yang dibagikan host pada layar utama acara atau melalui QR code sesi.
+                Use the PIN shared by the host on the main event screen or through the session QR code.
               </p>
             ) : null}
 
@@ -112,17 +112,17 @@ export default function JoinPage() {
               </div>
             </div>
             <div className="mt-5 space-y-4 text-sm leading-7 text-slate-600">
-              <p>1. Masukkan `QUIZ ID` yang dibagikan host.</p>
-              <p>2. Isi nama tampilan untuk waiting room.</p>
-              <p>3. Tunggu host memulai pertanyaan pertama.</p>
-              <p>4. Jawab cepat untuk mendapat bonus poin.</p>
+              <p>1. Enter the `QUIZ ID` shared by the host.</p>
+              <p>2. Fill in a display name for the waiting room.</p>
+              <p>3. Wait for the host to launch the first question.</p>
+              <p>4. Answer quickly to earn bonus points.</p>
             </div>
           </div>
           <div className="panel-dark p-6">
             <p className="text-xs uppercase tracking-[0.25em] text-white/70">Experience Note</p>
             <p className="mt-3 text-lg leading-8 text-white">
-              Antarmuka dibuat agar tetap terasa premium saat dibuka di ponsel peserta maupun
-              saat dipresentasikan pada layar besar acara korporat.
+              The interface is designed to feel premium on participant phones and polished enough
+              to support the main screen experience during a corporate event.
             </p>
           </div>
         </section>

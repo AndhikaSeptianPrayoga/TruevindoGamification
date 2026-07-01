@@ -58,7 +58,7 @@ export default function HostLivePage() {
     <AppShell
       eyebrow="Host Live"
       title={question?.text ?? 'The active question will appear here.'}
-      description="Layar live menampilkan pertanyaan aktif, timer utama, dan progres jawaban peserta sebelum admin berpindah ke hasil."
+      description="The live host screen shows the active question, the main timer, and participant response progress before the admin moves to results."
       aside={<AdminSidebar />}
     >
       <div className="grid gap-6 xl:grid-cols-[1.15fr_0.85fr]">
@@ -120,8 +120,8 @@ export default function HostLivePage() {
             </div>
             <p className="mt-4 text-sm leading-7 text-slate-600">
               {everyoneAnswered
-                ? 'Semua peserta sudah menjawab. Lanjutkan ke hasil untuk menampilkan ringkasan ronde ini.'
-                : 'Pantau jawaban yang masuk. Saat siap, lanjutkan ke hasil untuk ronde ini.'}
+                ? 'Everyone has answered. Move to results to present the summary for this round.'
+                : 'Monitor incoming answers and move to results when you are ready to close the round.'}
             </p>
           </div>
 

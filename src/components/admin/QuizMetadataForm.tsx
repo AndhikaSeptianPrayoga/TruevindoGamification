@@ -28,32 +28,32 @@ export function QuizMetadataForm({
       <p className="kicker">Quiz Metadata</p>
       <div className="mt-5 grid gap-5">
         <div>
-          <label className="mb-2 block text-xs uppercase tracking-[0.2em] text-slate-500">
-            Judul Quiz
+          <label className="mb-2 block text-xs uppercase tracking-[0.2em] text-slate-600">
+            Quiz Title
           </label>
           <input
             value={title}
             onChange={(event) => onTitleChange(event.target.value)}
             className="brand-input"
-            placeholder="Contoh: DIGICON 2026 Corporate Challenge"
+            placeholder="e.g. DIGICON 2026 Corporate Challenge"
           />
         </div>
 
         <div>
-          <label className="mb-2 block text-xs uppercase tracking-[0.2em] text-slate-500">
-            Deskripsi
+          <label className="mb-2 block text-xs uppercase tracking-[0.2em] text-slate-600">
+            Description
           </label>
           <textarea
             value={description}
             onChange={(event) => onDescriptionChange(event.target.value)}
             rows={5}
             className="brand-input"
-            placeholder="Jelaskan konteks acara, target peserta, dan tujuan quiz."
+            placeholder="Describe the event context, target audience, and quiz goal."
           />
         </div>
 
         <div>
-          <label className="mb-2 block text-xs uppercase tracking-[0.2em] text-slate-500">
+          <label className="mb-2 block text-xs uppercase tracking-[0.2em] text-slate-600">
             Status
           </label>
           <div className="grid gap-3 sm:grid-cols-3">
@@ -76,11 +76,11 @@ export function QuizMetadataForm({
 
         <div className="grid gap-3 sm:grid-cols-2">
           <div className="metric-tile">
-            <p className="text-xs uppercase tracking-[0.2em] text-slate-500">Total Questions</p>
+            <p className="text-xs uppercase tracking-[0.2em] text-slate-600">Total Questions</p>
             <p className="mt-2 font-display text-2xl font-semibold text-slate-950">{questionCount}</p>
           </div>
           <div className="metric-tile">
-            <p className="text-xs uppercase tracking-[0.2em] text-slate-500">Participant History</p>
+            <p className="text-xs uppercase tracking-[0.2em] text-slate-600">Participant History</p>
             <p className="mt-2 font-display text-2xl font-semibold text-slate-950">{participantCount}</p>
           </div>
         </div>

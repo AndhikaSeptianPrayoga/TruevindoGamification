@@ -21,8 +21,8 @@ export function AdminSidebar() {
       <div className="mb-6 border-b border-slate-200 pb-4">
         <p className="kicker text-accent">Truevindo Games</p>
         <h2 className="mt-2 font-display text-2xl font-semibold text-slate-950">Control Room</h2>
-        <p className="mt-3 text-sm text-slate-600">{user?.fullName ?? 'Admin Session'}</p>
-        <p className="text-xs uppercase tracking-[0.2em] text-slate-400">{user?.email}</p>
+        <p className="mt-3 text-sm text-slate-700">{user?.fullName ?? 'Admin Session'}</p>
+        <p className="text-xs uppercase tracking-[0.2em] text-slate-500">{user?.email}</p>
       </div>
       <nav className="space-y-2">
         {items.map(({ to, label, icon: Icon }) => {

@@ -6,8 +6,9 @@ interface AnswerDistributionChartProps {
   data: AnswerDistribution[]
 }
 
-const CORRECT_COLOR = '#1d4ed8'
-const NEUTRAL_COLOR = '#cbd5e1'
+const CORRECT_COLOR = '#16a34a'
+const INCORRECT_COLOR = '#f59e0b'
+const NEUTRAL_COLOR = '#94a3b8'
 
 export function AnswerDistributionChart({ data }: AnswerDistributionChartProps) {
   const correct = data.find((item) => item.isCorrect)
@@ -21,7 +22,7 @@ export function AnswerDistributionChart({ data }: AnswerDistributionChartProps) 
           <h3 className="mt-2 font-display text-2xl font-semibold text-slate-950">Option Distribution</h3>
         </div>
         {hasReveal ? (
-          <span className="flex items-center gap-2 rounded-full border border-signal/20 bg-signal/10 px-4 py-2 text-sm font-semibold text-signal">
+          <span className="status-chip-success flex items-center gap-2 rounded-full px-4 py-2 text-sm font-semibold">
             <CheckCircle2 className="h-4 w-4" />
             Correct answer: {correct?.option}
           </span>
@@ -39,7 +40,7 @@ export function AnswerDistributionChart({ data }: AnswerDistributionChartProps) 
               {data.map((item) => (
                 <Cell
                   key={item.option}
-                  fill={hasReveal ? (item.isCorrect ? CORRECT_COLOR : NEUTRAL_COLOR) : '#ef233c'}
+                  fill={hasReveal ? (item.isCorrect ? CORRECT_COLOR : INCORRECT_COLOR) : '#2563eb'}
                 />
               ))}
             </Bar>
@@ -54,8 +55,8 @@ export function AnswerDistributionChart({ data }: AnswerDistributionChartProps) 
               key={item.option}
               className={`flex items-center justify-between rounded-2xl border px-3 py-2 text-sm ${
                 item.isCorrect
-                  ? 'border-signal/25 bg-signal/10 text-signal'
-                  : 'border-slate-200/80 bg-white/80 text-slate-600'
+                  ? 'status-chip-success'
+                  : 'status-chip-warning'
               }`}
             >
               <span className="font-semibold">

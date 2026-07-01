@@ -89,12 +89,12 @@ export default function QuizListPage() {
   return (
     <AppShell
       eyebrow="Admin Dashboard"
-      title="Quiz library bergaya control room premium untuk operasional event korporat."
-      description="Dari sini admin bisa menyiapkan draft, mempublikasikan quiz, menduplikasi konten, dan langsung membuka sesi live dengan tampilan yang lebih profesional dan mudah dipahami."
+      title="A premium quiz library built as a clear and reliable control room for corporate events."
+      description="From here, the admin can prepare drafts, publish quizzes, duplicate content, and launch live sessions through a clearer and more production-ready control room experience."
       aside={<AdminSidebar />}
     >
       {notice ? (
-        <div className="panel-elevated mb-4 px-5 py-4 text-sm text-slate-600">
+        <div className="panel-elevated mb-4 px-5 py-4 text-sm text-slate-700">
           {notice}
         </div>
       ) : null}

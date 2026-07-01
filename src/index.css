@@ -145,7 +145,7 @@ body::after {
   }
 
   .kicker {
-    @apply text-[11px] font-semibold uppercase tracking-[0.38em] text-slate-500;
+    @apply text-[11px] font-semibold uppercase tracking-[0.38em] text-slate-600;
   }
 
   .pill-tag {
@@ -221,6 +221,57 @@ body::after {
     border-color: rgba(226, 232, 240, 0.8);
     background: rgba(255, 255, 255, 0.88);
     box-shadow: 0 10px 28px rgba(15, 23, 42, 0.05);
+  }
+
+  .notice-success {
+    border: 1px solid rgba(34, 197, 94, 0.22);
+    background: rgba(240, 253, 244, 0.96);
+    color: #166534;
+  }
+
+  .notice-warning {
+    border: 1px solid rgba(245, 158, 11, 0.28);
+    background: rgba(255, 251, 235, 0.96);
+    color: #92400e;
+  }
+
+  .notice-danger {
+    border: 1px solid rgba(239, 68, 68, 0.22);
+    background: rgba(254, 242, 242, 0.96);
+    color: #b91c1c;
+  }
+
+  .surface-success {
+    border: 1px solid rgba(34, 197, 94, 0.2);
+    background: linear-gradient(180deg, rgba(240, 253, 244, 0.98), rgba(220, 252, 231, 0.92));
+  }
+
+  .surface-warning {
+    border: 1px solid rgba(245, 158, 11, 0.22);
+    background: linear-gradient(180deg, rgba(255, 251, 235, 0.98), rgba(254, 243, 199, 0.92));
+  }
+
+  .surface-danger {
+    border: 1px solid rgba(239, 68, 68, 0.2);
+    background: linear-gradient(180deg, rgba(254, 242, 242, 0.98), rgba(254, 226, 226, 0.92));
+  }
+
+  .status-chip-success {
+    border: 1px solid rgba(34, 197, 94, 0.18);
+    background: rgba(240, 253, 244, 0.95);
+    color: #166534;
+  }
+
+  .status-chip-warning {
+    border: 1px solid rgba(245, 158, 11, 0.2);
+    background: rgba(255, 251, 235, 0.95);
+    color: #92400e;
+  }
+
+  .status-chip-danger {
+    border: 1px solid rgba(239, 68, 68, 0.18);
+    background: rgba(254, 242, 242, 0.95);
+    color: #b91c1c;
   }
 
   .hero-orb {

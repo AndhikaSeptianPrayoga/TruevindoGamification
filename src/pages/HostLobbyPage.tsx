@@ -79,12 +79,12 @@ export default function HostLobbyPage() {
   return (
     <AppShell
       eyebrow="Host Lobby"
-      title="Waiting room host yang rapi untuk menyiapkan peserta sebelum quiz dimulai."
-      description="Bagikan PIN atau QR, pastikan peserta sudah masuk, lalu mulai pertanyaan pertama saat ruangan siap. Alurnya dibuat linear agar operator event mudah mengendalikan sesi."
+      title="A polished host waiting room built to prepare participants before the quiz begins."
+      description="Share the PIN or QR code, confirm that participants have joined, then start the first question once the room is ready. The flow stays linear to reduce operator error during live events."
       aside={<AdminSidebar />}
     >
       {notice ? (
-        <div className="panel-elevated mb-4 px-5 py-4 text-sm text-slate-600">
+        <div className="notice-danger mb-4 rounded-[28px] px-5 py-4 text-sm">
           {notice}
         </div>
       ) : null}

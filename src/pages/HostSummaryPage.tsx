@@ -60,8 +60,8 @@ export default function HostSummaryPage() {
   return (
     <AppShell
       eyebrow="Round Summary"
-      title="Hasil jawaban ronde ini dan posisi leaderboard terbaru."
-      description="Setelah hasil ditampilkan, admin cukup melanjutkan ke pertanyaan berikutnya atau otomatis menuju podium saat semua pertanyaan selesai."
+      title="This round's answer results and the latest leaderboard positions."
+      description="Once the results are shown, the admin only needs to move forward to the next question or go straight to the podium when the final round is complete."
       aside={<AdminSidebar />}
     >
       <div className="grid gap-6 xl:grid-cols-[0.95fr_1.05fr]">
@@ -74,7 +74,7 @@ export default function HostSummaryPage() {
           onClick={() => void handleNextStage()}
           className="brand-button-primary min-w-64"
         >
-          {isLastQuestion ? 'Next: Podium' : 'Next: Following Question'}
+          {isLastQuestion ? 'Next: Podium' : 'Next: Question'}
         </button>
       </div>
     </AppShell>

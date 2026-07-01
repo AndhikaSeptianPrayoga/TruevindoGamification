@@ -69,8 +69,8 @@ export default function PlayPage() {
     return (
       <AppShell
         eyebrow="Gameplay"
-        title="Belum ada pertanyaan yang aktif."
-        description="Buka sesi live dari layar host terlebih dulu, lalu peserta akan masuk otomatis saat pertanyaan dimulai."
+        title="No question is active yet."
+        description="Open a live session from the host screen first, then participants move in automatically once the question begins."
       >
         <Link to="/" className="text-sm text-slate-700 underline underline-offset-4">
           Back to join screen
@@ -109,7 +109,7 @@ export default function PlayPage() {
     <AppShell
       eyebrow="Live Question"
       title={activeQuestion.text}
-      description="Pilih satu jawaban sebelum countdown berakhir. Timer utama dikendalikan server agar semua perangkat tetap sinkron."
+      description="Choose one answer before the countdown ends. The server controls the master timer so every device stays synchronized."
       aside={
         <div className="grid grid-cols-2 gap-3">
           <StatCard label="Time" value={formatRemainingTime(countdown.remainingMs)} />
@@ -162,9 +162,9 @@ export default function PlayPage() {
             </div>
           </div>
 
-          <div className="panel-elevated p-5 text-sm leading-7 text-slate-600">
+          <div className="panel-elevated p-5 text-sm leading-7 text-slate-700">
             <p>Participant ID: {participantId ?? 'guest-mode'}</p>
-            <p>Respons disimpan secara lokal terlebih dulu sebelum server mengirim konfirmasi.</p>
+            <p>Your response is stored locally first before the server acknowledgement is returned.</p>
           </div>
         </section>
       </div>

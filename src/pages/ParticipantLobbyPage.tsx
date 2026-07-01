@@ -42,11 +42,11 @@ export default function ParticipantLobbyPage() {
   return (
     <AppShell
       eyebrow="Participant Lobby"
-      title="Waiting room peserta yang rapi, jelas, dan siap lanjut saat host memulai quiz."
-      description="Semua peserta berpindah ke pertanyaan berikutnya secara sinkron. Layar Anda selalu mengikuti status utama dari host."
+      title="A clear waiting room experience that keeps every participant ready for the next step."
+      description="All participants move to the next question in sync. Your screen always follows the live session controlled by the host."
       aside={
         <div className="grid grid-cols-2 gap-3">
-          <StatCard label="PIN" value={sessionState.pinCode} hint="Dibagikan ke peserta lain" />
+          <StatCard label="PIN" value={sessionState.pinCode} hint="Shared with other participants" />
           <StatCard
             label="Participants"
             value={String(sessionState.joinedParticipants)}
@@ -80,14 +80,14 @@ export default function ParticipantLobbyPage() {
             <p className="kicker">Sync Status</p>
             <p className="mt-3 font-display text-3xl font-semibold text-slate-950">Waiting Room Active</p>
             <p className="mt-3 text-sm leading-7 text-slate-600">
-              Host akan meluncurkan pertanyaan pertama saat semua peserta siap.
+              The host will launch the first question once everyone is ready.
             </p>
           </div>
           <div className="panel-dark p-6">
-            <p className="text-xs uppercase tracking-[0.25em] text-white/65">Instruksi Peserta</p>
+            <p className="text-xs uppercase tracking-[0.25em] text-white/65">Participant Guidance</p>
             <p className="mt-3 text-sm leading-7 text-white/85">
-              Tetap di halaman ini. Sistem akan memindahkan Anda secara otomatis ke pertanyaan
-              berikutnya saat host memulai sesi.
+              Stay on this screen. The system moves you automatically to the next stage when the
+              host starts the session.
             </p>
           </div>
         </section>

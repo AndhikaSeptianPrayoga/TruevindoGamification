@@ -8,9 +8,9 @@ export function ProtectedAdminRoute({ children }: PropsWithChildren) {
 
   if (!hasHydrated) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-corporate px-6 text-white">
-        <div className="rounded-[28px] border border-white/10 bg-white/5 px-6 py-5 text-sm uppercase tracking-[0.25em] text-slate-300">
-          Menyiapkan akses admin...
+      <div className="flex min-h-screen items-center justify-center bg-corporate px-6 text-slate-950">
+        <div className="panel-elevated px-6 py-5 text-sm uppercase tracking-[0.25em] text-slate-700">
+          Preparing admin access...
         </div>
       </div>
     )

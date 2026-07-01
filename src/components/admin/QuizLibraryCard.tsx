@@ -26,10 +26,10 @@ export function QuizLibraryCard({
           <span className="pill-tag">
             {quiz.status}
           </span>
-          <span className="text-xs uppercase tracking-[0.2em] text-slate-500">
+          <span className="text-xs uppercase tracking-[0.2em] text-slate-600">
             {quiz.questionCount} questions
           </span>
-          <span className="text-xs uppercase tracking-[0.2em] text-slate-400">
+          <span className="text-xs uppercase tracking-[0.2em] text-slate-500">
             Updated {new Date(quiz.updatedAt).toLocaleTimeString('en-US')}
           </span>
         </div>
