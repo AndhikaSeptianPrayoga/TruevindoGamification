@@ -149,7 +149,7 @@ body::after {
   }
 
   .pill-tag {
-    @apply inline-flex items-center rounded-full border border-slate-200 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-600;
+    @apply inline-flex items-center rounded-full border border-slate-200 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-700;
     background: rgba(255, 255, 255, 0.8);
   }
 
@@ -272,6 +272,12 @@ body::after {
     border: 1px solid rgba(239, 68, 68, 0.18);
     background: rgba(254, 242, 242, 0.95);
     color: #b91c1c;
+  }
+
+  .brand-input::placeholder,
+  textarea::placeholder {
+    color: #64748b;
+    opacity: 1;
   }
 
   .hero-orb {

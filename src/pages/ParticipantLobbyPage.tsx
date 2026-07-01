@@ -79,15 +79,8 @@ export default function ParticipantLobbyPage() {
           <div className="panel-elevated p-6">
             <p className="kicker">Sync Status</p>
             <p className="mt-3 font-display text-3xl font-semibold text-slate-950">Waiting Room Active</p>
-            <p className="mt-3 text-sm leading-7 text-slate-600">
+            <p className="mt-3 text-sm leading-7 text-slate-700">
               The host will launch the first question once everyone is ready.
-            </p>
-          </div>
-          <div className="panel-dark p-6">
-            <p className="text-xs uppercase tracking-[0.25em] text-white/65">Participant Guidance</p>
-            <p className="mt-3 text-sm leading-7 text-white/85">
-              Stay on this screen. The system moves you automatically to the next stage when the
-              host starts the session.
             </p>
           </div>
         </section>

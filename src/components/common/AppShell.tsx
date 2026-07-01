@@ -37,13 +37,15 @@ export function AppShell({
           {aside ? <div className="w-full xl:max-w-md">{aside}</div> : null}
         </header>
         <main className="flex-1">{children}</main>
-        <footer className="mt-2 flex flex-col items-center gap-4 pb-2">
-          <div className="panel-dark flex items-center gap-6 px-5 py-4">
+        <footer className="mt-2 flex flex-col items-center gap-4 rounded-[32px] bg-slate-950/82 px-6 py-6 shadow-[0_24px_60px_rgba(2,6,23,0.24)]">
+          <div className="rounded-[28px] border border-white/10 bg-slate-950 px-5 py-4 shadow-[inset_0_1px_0_rgba(255,255,255,0.06)]">
+            <div className="flex items-center gap-6">
             <img src={truevindoLogo} alt="Truevindo" className="h-8 w-auto object-contain md:h-10" />
             <span className="h-8 w-px bg-white/15" aria-hidden />
             <img src={gimflyLogo} alt="Gimfly Studio" className="h-8 w-auto object-contain md:h-10" />
+            </div>
           </div>
-          <p className="text-xs uppercase tracking-[0.25em] text-slate-600">
+          <p className="text-xs uppercase tracking-[0.25em] text-slate-300">
             Future-ready experience by Truevindo &amp; Gimfly Studio
           </p>
         </footer>

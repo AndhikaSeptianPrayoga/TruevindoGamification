@@ -46,24 +46,28 @@ export default function AdminLoginPage() {
       <div className="panel-elevated mx-auto max-w-xl p-6">
         <div className="space-y-5">
           <div>
-            <label className="mb-2 block text-xs uppercase tracking-[0.25em] text-slate-500">
+            <label htmlFor="admin-email" className="mb-2 block text-xs uppercase tracking-[0.25em] text-slate-700">
               Email
             </label>
             <input
+              id="admin-email"
               value={email}
               onChange={(event) => setEmail(event.target.value)}
               className="brand-input"
+              autoComplete="username"
             />
           </div>
           <div>
-            <label className="mb-2 block text-xs uppercase tracking-[0.25em] text-slate-500">
+            <label htmlFor="admin-password" className="mb-2 block text-xs uppercase tracking-[0.25em] text-slate-700">
               Password
             </label>
             <input
+              id="admin-password"
               type="password"
               value={password}
               onChange={(event) => setPassword(event.target.value)}
               className="brand-input"
+              autoComplete="current-password"
             />
           </div>
           {error ? (
@@ -79,7 +83,7 @@ export default function AdminLoginPage() {
           >
             {isLoading ? 'Loading...' : 'Sign in to Dashboard'}
           </button>
-          <p className="text-xs leading-6 text-slate-500">
+          <p className="text-xs leading-6 text-slate-700">
             Default demo credentials: `admin@truevindo.games` / `demo-password`
           </p>
         </div>

@@ -39,9 +39,8 @@ export default function JoinPage() {
       title="Live quiz experience with a professional, modern, future-ready event interface."
       description="Enter the QUIZ ID and your display name to join the live session. This interface is optimized for mobile devices, easy to understand, and stays in sync throughout a modern corporate event."
       aside={
-        <div className="grid gap-3 md:grid-cols-2">
+        <div className="grid gap-3">
           <StatCard label="Format" value="Live Quiz" hint="One synchronized flow from host to participants" />
-          <StatCard label="Style" value="Future B2B" hint="Clean, premium, event-ready" />
         </div>
       }
     >
@@ -54,25 +53,29 @@ export default function JoinPage() {
 
           <div className="space-y-5">
             <div>
-              <label className="mb-2 block text-xs uppercase tracking-[0.25em] text-slate-500">
+              <label htmlFor="join-pin-code" className="mb-2 block text-xs uppercase tracking-[0.25em] text-slate-700">
                 QUIZ ID
               </label>
               <input
+                id="join-pin-code"
                 value={pinCode}
                 onChange={(event) => setPinCode(event.target.value)}
                 className="brand-input text-lg"
                 placeholder="Enter the session PIN"
+                autoComplete="off"
               />
             </div>
             <div>
-              <label className="mb-2 block text-xs uppercase tracking-[0.25em] text-slate-500">
+              <label htmlFor="join-display-name" className="mb-2 block text-xs uppercase tracking-[0.25em] text-slate-700">
                 Display Name
               </label>
               <input
+                id="join-display-name"
                 value={displayName}
                 onChange={(event) => setDisplayName(event.target.value)}
                 className="brand-input text-lg"
                 placeholder="Enter your name"
+                autoComplete="nickname"
               />
             </div>
 
@@ -83,7 +86,7 @@ export default function JoinPage() {
             ) : null}
 
             {!error ? (
-              <p className="text-sm leading-7 text-slate-500">
+              <p className="text-sm leading-7 text-slate-700">
                 Use the PIN shared by the host on the main event screen or through the session QR code.
               </p>
             ) : null}
@@ -111,19 +114,12 @@ export default function JoinPage() {
                 <h2 className="font-display text-2xl font-semibold text-slate-950">Participant Flow</h2>
               </div>
             </div>
-            <div className="mt-5 space-y-4 text-sm leading-7 text-slate-600">
+            <div className="mt-5 space-y-4 text-sm leading-7 text-slate-700">
               <p>1. Enter the `QUIZ ID` shared by the host.</p>
               <p>2. Fill in a display name for the waiting room.</p>
               <p>3. Wait for the host to launch the first question.</p>
               <p>4. Answer quickly to earn bonus points.</p>
             </div>
-          </div>
-          <div className="panel-dark p-6">
-            <p className="text-xs uppercase tracking-[0.25em] text-white/70">Experience Note</p>
-            <p className="mt-3 text-lg leading-8 text-white">
-              The interface is designed to feel premium on participant phones and polished enough
-              to support the main screen experience during a corporate event.
-            </p>
           </div>
         </section>
       </div>

@@ -28,10 +28,11 @@ export function QuizMetadataForm({
       <p className="kicker">Quiz Metadata</p>
       <div className="mt-5 grid gap-5">
         <div>
-          <label className="mb-2 block text-xs uppercase tracking-[0.2em] text-slate-600">
+          <label htmlFor="quiz-title" className="mb-2 block text-xs uppercase tracking-[0.2em] text-slate-700">
             Quiz Title
           </label>
           <input
+            id="quiz-title"
             value={title}
             onChange={(event) => onTitleChange(event.target.value)}
             className="brand-input"
@@ -40,10 +41,11 @@ export function QuizMetadataForm({
         </div>
 
         <div>
-          <label className="mb-2 block text-xs uppercase tracking-[0.2em] text-slate-600">
+          <label htmlFor="quiz-description" className="mb-2 block text-xs uppercase tracking-[0.2em] text-slate-700">
             Description
           </label>
           <textarea
+            id="quiz-description"
             value={description}
             onChange={(event) => onDescriptionChange(event.target.value)}
             rows={5}
@@ -53,7 +55,7 @@ export function QuizMetadataForm({
         </div>
 
         <div>
-          <label className="mb-2 block text-xs uppercase tracking-[0.2em] text-slate-600">
+          <label className="mb-2 block text-xs uppercase tracking-[0.2em] text-slate-700">
             Status
           </label>
           <div className="grid gap-3 sm:grid-cols-3">

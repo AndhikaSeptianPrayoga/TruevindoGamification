@@ -65,6 +65,10 @@ export function QuizQuestionEditorCard({
     setImageNotice('')
   }
 
+  const durationInputId = `question-duration-${question.id}`
+  const textInputId = `question-text-${question.id}`
+  const imageUrlInputId = `question-image-url-${question.id}`
+
   return (
     <div className="panel-soft p-5">
       <div className="flex flex-wrap items-center justify-between gap-3">
@@ -76,8 +80,11 @@ export function QuizQuestionEditorCard({
         </div>
         <div className="flex items-center gap-3">
           <div className="flex items-center gap-3 rounded-2xl border border-slate-200 bg-white px-3 py-2">
-            <span className="text-xs uppercase tracking-[0.2em] text-slate-600">Duration</span>
+            <label htmlFor={durationInputId} className="text-xs uppercase tracking-[0.2em] text-slate-700">
+              Duration
+            </label>
             <input
+              id={durationInputId}
               type="number"
               min={5}
               value={question.durationSeconds}
@@ -97,10 +104,11 @@ export function QuizQuestionEditorCard({
       </div>
 
       <div className="mt-5">
-        <label className="mb-2 block text-xs uppercase tracking-[0.2em] text-slate-600">
+        <label htmlFor={textInputId} className="mb-2 block text-xs uppercase tracking-[0.2em] text-slate-700">
           Question
         </label>
         <textarea
+          id={textInputId}
           value={question.text}
           rows={3}
           onChange={(event) => onQuestionTextChange(question.id, event.target.value)}
@@ -110,7 +118,7 @@ export function QuizQuestionEditorCard({
       </div>
 
       <div className="mt-5">
-        <label className="mb-2 block text-xs uppercase tracking-[0.2em] text-slate-600">
+        <label htmlFor={imageUrlInputId} className="mb-2 block text-xs uppercase tracking-[0.2em] text-slate-700">
           Supporting Image
         </label>
         <div className="flex flex-wrap gap-2">
@@ -158,6 +166,7 @@ export function QuizQuestionEditorCard({
 
         {imageInputMode === 'link' ? (
           <input
+            id={imageUrlInputId}
             type="url"
             value={question.imageUrl ?? ''}
             onChange={(event) => onQuestionImageUrlChange(question.id, event.target.value)}
@@ -183,7 +192,7 @@ export function QuizQuestionEditorCard({
         )}
 
         {imageNotice ? (
-          <p className="mt-3 text-xs uppercase tracking-[0.2em] text-slate-600">{imageNotice}</p>
+          <p className="mt-3 text-xs uppercase tracking-[0.2em] text-slate-700">{imageNotice}</p>
         ) : null}
         {question.imageUrl ? (
           <div className="mt-4 overflow-hidden rounded-[28px] border border-slate-200 bg-white">
