@@ -60,17 +60,19 @@ export default function PlayPage() {
     }
   }, [sessionId, sessionState, setSessionState])
 
-  // Reset per-question state (and clear any previous result) whenever a new
-  // question goes live, then play a short reveal cue.
+  // Reset per-question state ONLY when a genuinely new question goes live.
+  // Crucially, do NOT reset when the question ends (activeQuestion becomes null
+  // in the result phase) — that would wipe the result/answer we just captured.
   useEffect(() => {
+    if (!activeQuestion?.questionId) {
+      return
+    }
     setSelectedOption(null)
     setLatestResult(null)
     setLastAnswer(null)
     lastTickRef.current = Number.POSITIVE_INFINITY
     submittingRef.current = false
-    if (activeQuestion?.questionId) {
-      sound.whoosh()
-    }
+    sound.whoosh()
   }, [activeQuestion?.questionId, setLastAnswer, setLatestResult, setSelectedOption])
 
   // Gentle tick during the final five seconds to build tension.
@@ -89,6 +91,23 @@ export default function PlayPage() {
   // everyone, and the question timer only starts once it finishes.
   if (status === 'countdown') {
     return <CountdownOverlay />
+  }
+
+  // While a submit is in flight, the question may end (activeQuestion becomes
+  // null). Show a brief "locked in" screen instead of the empty-state message.
+  if (submittingRef.current && !activeQuestion) {
+    return (
+      <AppShell
+        eyebrow="Answer Received"
+        title="Answer locked in."
+        description="Revealing your result…"
+      >
+        <div className="panel-elevated animate-pop-in mx-auto max-w-md p-8 text-center">
+          <p className="font-display text-2xl font-semibold text-slate-950">Answer locked in ✓</p>
+          <p className="mt-2 text-sm text-slate-600">Hang tight — revealing your result.</p>
+        </div>
+      </AppShell>
+    )
   }
 
   if (!sessionState || !activeQuestion) {
