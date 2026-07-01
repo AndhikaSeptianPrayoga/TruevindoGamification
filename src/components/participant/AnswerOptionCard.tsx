@@ -55,8 +55,8 @@ export function AnswerOptionCard({
       className={`min-h-[118px] rounded-[30px] border px-5 py-5 text-left transition duration-200 ${
         selected
           ? 'border-slate-950/10 bg-slate-950 text-white shadow-float ring-4 ring-slate-950/5'
-          : 'border-slate-200/85 bg-gradient-to-br text-slate-900 shadow-[0_16px_36px_rgba(15,23,42,0.07)] hover:-translate-y-0.5 hover:border-signal/35 hover:shadow-[0_22px_52px_rgba(29,78,216,0.12)]'
-      } ${accent.surface} ${selected ? '' : accent.ring} ${disabled ? 'cursor-not-allowed opacity-60' : ''}`}
+          : 'border-slate-200/85 bg-white text-slate-900 shadow-[0_16px_36px_rgba(15,23,42,0.07)] hover:-translate-y-0.5 hover:border-signal/35 hover:shadow-[0_22px_52px_rgba(29,78,216,0.12)]'
+      } ${disabled ? 'cursor-not-allowed opacity-60' : ''}`}
       aria-label={`Choose option ${option}: ${text}`}
     >
       <div className="flex items-center gap-4">
