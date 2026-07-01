@@ -1,9 +1,10 @@
-import { useEffect, useMemo, useRef } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 import type { AnswerOption } from '@shared/types/game'
 import { AppShell } from '@/components/common/AppShell'
 import { StatCard } from '@/components/common/StatCard'
 import { AnswerOptionCard } from '@/components/participant/AnswerOptionCard'
+import { CountdownOverlay } from '@/components/participant/CountdownOverlay'
 import { useCountdown } from '@/hooks/useCountdown'
 import { useSessionSocket } from '@/hooks/useSessionSocket'
 import { useParticipantStore } from '@/stores/useParticipantStore'
@@ -27,6 +28,8 @@ export default function PlayPage() {
   const activeQuestion = sessionState?.activeQuestion
   const countdown = useCountdown(activeQuestion?.deadlineAt ?? null, activeQuestion?.durationSeconds ?? 20)
   const lastTickRef = useRef<number>(Number.POSITIVE_INFINITY)
+  const submittingRef = useRef(false)
+  const [showCountdown, setShowCountdown] = useState(false)
   const secondsLeft = Math.max(0, Math.ceil(countdown.remainingMs / 1000))
   const me = useMemo(
     () => sessionState?.leaderboard.find((participant) => participant.id === participantId) ?? null,
@@ -38,6 +41,12 @@ export default function PlayPage() {
     onState: setSessionState,
     onQuestionResult: (state) => {
       setSessionState(state)
+      // Don't navigate away mid-submit: handleSubmit will navigate once it has
+      // the participant result. Navigating here would unmount + disconnect the
+      // socket before the answer acknowledgement arrives, losing the result.
+      if (submittingRef.current) {
+        return
+      }
       navigate(`/result/${sessionId}`)
     },
   })
@@ -50,12 +59,13 @@ export default function PlayPage() {
     }
   }, [sessionId, sessionState, setSessionState])
 
-  // Reset selection and play a "new question" cue whenever the question changes.
+  // Reset state and show the 3-2-1 standby whenever a new question goes live.
   useEffect(() => {
     setSelectedOption(null)
     lastTickRef.current = Number.POSITIVE_INFINITY
+    submittingRef.current = false
     if (activeQuestion?.questionId) {
-      sound.whoosh()
+      setShowCountdown(true)
     }
   }, [activeQuestion?.questionId, setSelectedOption])
 
@@ -86,9 +96,14 @@ export default function PlayPage() {
   }
 
   async function handleSubmit(option: AnswerOption) {
+    if (submittingRef.current || selectedOption) {
+      return
+    }
+    submittingRef.current = true
     sound.select()
     sound.vibrate(25)
     setSelectedOption(option)
+
     if (participantId && activeQuestion) {
       // Measure the real response time from when the question went live so the
       // server can award more points for faster answers.
@@ -96,26 +111,36 @@ export default function PlayPage() {
       const questionStart = new Date(activeQuestion.deadlineAt).getTime() - durationMs
       const responseTimeMs = Math.min(Math.max(Date.now() - questionStart, 0), durationMs)
 
-      const response = await submitAnswer({
-        sessionId,
-        participantId,
-        questionId: activeQuestion.questionId,
-        selectedOption: option,
-        responseTimeMs,
-      })
+      // Wait for the server acknowledgement (carries the participant result),
+      // with a timeout fallback so we never get stuck if the ack is lost.
+      const response = await Promise.race([
+        submitAnswer({
+          sessionId,
+          participantId,
+          questionId: activeQuestion.questionId,
+          selectedOption: option,
+          responseTimeMs,
+        }),
+        new Promise<null>((resolve) => setTimeout(() => resolve(null), 4000)),
+      ]).catch(() => null)
 
-      setSessionState(response.sessionState)
-      if (response.participantResult) {
-        setLatestResult(response.participantResult)
+      if (response) {
+        setSessionState(response.sessionState)
+        if (response.participantResult) {
+          setLatestResult(response.participantResult)
+        }
       }
       // Brief beat so the "locked in" confirmation and checkmark are visible.
-      await new Promise((resolve) => setTimeout(resolve, 550))
-      navigate(`/result/${sessionId}`)
+      await new Promise((resolve) => setTimeout(resolve, 450))
     }
+
+    navigate(`/result/${sessionId}`)
   }
 
   return (
-    <AppShell
+    <>
+      {showCountdown ? <CountdownOverlay onDone={() => setShowCountdown(false)} /> : null}
+      <AppShell
       eyebrow="Live Question"
       title={activeQuestion.text}
       description="Choose one answer before the countdown ends. The server controls the master timer so every device stays synchronized."
@@ -149,7 +174,7 @@ export default function PlayPage() {
                   option={option}
                   text={text}
                   selected={selectedOption === option}
-                  disabled={Boolean(selectedOption)}
+                  disabled={Boolean(selectedOption) || showCountdown}
                   onClick={() => handleSubmit(option)}
                 />
               ),
@@ -214,6 +239,7 @@ export default function PlayPage() {
           )}
         </section>
       </div>
-    </AppShell>
+      </AppShell>
+    </>
   )
 }
