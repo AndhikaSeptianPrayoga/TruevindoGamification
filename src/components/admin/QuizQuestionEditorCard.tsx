@@ -240,7 +240,7 @@ export function QuizQuestionEditorCard({
                 onChange={(event) => onOptionChange(question.id, option, event.target.value)}
                 className={`mt-3 w-full rounded-2xl border px-4 py-3 text-sm outline-none transition ${
                   active
-                    ? 'border-white/20 bg-emerald-950/22 text-white placeholder:text-emerald-100/70'
+                    ? 'border-emerald-100/90 bg-white/96 text-slate-950 shadow-[inset_0_1px_0_rgba(255,255,255,0.88)] placeholder:text-slate-500'
                     : 'border-slate-200 bg-slate-50 text-slate-900 placeholder:text-slate-400'
                 }`}
                 placeholder={`Fill in option ${option}`}
