@@ -296,6 +296,43 @@ body::after {
   }
 }
 
+/* ---- Spamming Games ---- */
+@keyframes float-plus {
+  0% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-72px) scale(1.4);
+  }
+}
+
+.float-plus {
+  position: fixed;
+  z-index: 70;
+  font-weight: 800;
+  font-size: 1.25rem;
+  color: #16a34a;
+  pointer-events: none;
+  animation: float-plus 0.9s ease-out forwards;
+}
+
+@keyframes spam-bump {
+  0% {
+    transform: scale(1);
+    background: rgba(34, 197, 94, 0.18);
+  }
+  100% {
+    transform: scale(1);
+    background: transparent;
+  }
+}
+
+.spam-bump {
+  animation: spam-bump 0.5s ease-out;
+}
+
 /* ---- Celebration & interaction animations ---- */
 @keyframes confetti-fall {
   0% {

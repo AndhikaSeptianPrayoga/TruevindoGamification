@@ -1,10 +1,11 @@
-import { FerrisWheel, LayoutDashboard, LogOut } from 'lucide-react'
+import { FerrisWheel, Keyboard, LayoutDashboard, LogOut } from 'lucide-react'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { useAdminAuthStore } from '@/stores/useAdminAuthStore'
 
 const items = [
   { to: '/admin/quizzes', label: 'Quiz Library', icon: LayoutDashboard },
   { to: '/admin/wheel', label: 'Wheel of Names', icon: FerrisWheel },
+  { to: '/admin/spam', label: 'Spamming Games', icon: Keyboard },
 ]
 
 export function AdminSidebar() {

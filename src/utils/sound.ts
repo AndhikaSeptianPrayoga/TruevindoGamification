@@ -147,6 +147,25 @@ export const sound = {
     })
   },
 
+  /** Rapid-fire hit blip for the spam game — pitch rises with the combo. */
+  hit(combo = 0) {
+    withContext((ctx) => {
+      playTone(ctx, {
+        freq: 880 + Math.min(combo, 8) * 40,
+        duration: 0.08,
+        type: 'triangle',
+        gain: 0.14,
+      })
+    })
+  },
+
+  /** Short low buzz for a wrong/blocked keystroke. */
+  miss() {
+    withContext((ctx) => {
+      playTone(ctx, { freq: 170, duration: 0.15, type: 'sawtooth', gain: 0.11 })
+    })
+  },
+
   /** Bright ascending arpeggio for a correct answer. */
   correct() {
     withContext((ctx) => {

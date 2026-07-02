@@ -28,3 +28,8 @@ dist-ssr
 *.sln
 *.sw?
 .vite
+# Graphify knowledge-graph output
+graphify-out/
+
+# Source reference for ported mini-games (has its own repo)
+GamesProject/

@@ -12,6 +12,8 @@ import PlayPage from '@/pages/PlayPage'
 import QuizEditorPage from '@/pages/QuizEditorPage'
 import QuizListPage from '@/pages/QuizListPage'
 import ResultPage from '@/pages/ResultPage'
+import SpamHostPage from '@/pages/SpamHostPage'
+import SpamPlayPage from '@/pages/SpamPlayPage'
 import WheelHostPage from '@/pages/WheelHostPage'
 import WheelJoinPage from '@/pages/WheelJoinPage'
 
@@ -27,12 +29,21 @@ export function AppRouter() {
         <Route path="/result/:sessionId" element={<ResultPage />} />
         <Route path="/finished/:sessionId" element={<ParticipantFinishedPage />} />
         <Route path="/wheel/:wheelId" element={<WheelJoinPage />} />
+        <Route path="/spam/:gameId" element={<SpamPlayPage />} />
         <Route path="/admin/login" element={<AdminLoginPage />} />
         <Route
           path="/admin/wheel"
           element={
             <ProtectedAdminRoute>
               <WheelHostPage />
+            </ProtectedAdminRoute>
+          }
+        />
+        <Route
+          path="/admin/spam"
+          element={
+            <ProtectedAdminRoute>
+              <SpamHostPage />
             </ProtectedAdminRoute>
           }
         />
