@@ -16,7 +16,9 @@ export default function ParticipantLobbyPage() {
     sessionId,
     onState: (state) => {
       setSessionState(state)
-      if (state.status === 'question_live') {
+      // Move into the play screen as soon as the 3-2-1 standby starts, so
+      // everyone sees the synchronized countdown before the first question.
+      if (state.status === 'countdown' || state.status === 'question_live') {
         navigate(`/play/${sessionId}`)
       }
     },
@@ -27,7 +29,7 @@ export default function ParticipantLobbyPage() {
       getPlayerState(sessionId)
         .then((state) => {
           setSessionState(state)
-          if (state.status === 'question_live') {
+          if (state.status === 'countdown' || state.status === 'question_live') {
             navigate(`/play/${sessionId}`)
           }
         })
