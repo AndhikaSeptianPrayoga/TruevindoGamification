@@ -1,4 +1,5 @@
 import type {
+  WheelAddEntryResult,
   WheelEntry,
   WheelEntrySource,
   WheelSpinPayload,
@@ -21,6 +22,36 @@ function generateId(prefix: string) {
 class WheelService {
   private wheels = new Map<string, WheelState>()
   private activeWheelId: string | null = null
+  /** wheelId -> deviceId -> entryId. One participant entry per device per wheel. */
+  private deviceIndex = new Map<string, Map<string, string>>()
+
+  private deviceMapOf(wheelId: string) {
+    let map = this.deviceIndex.get(wheelId)
+    if (!map) {
+      map = new Map<string, string>()
+      this.deviceIndex.set(wheelId, map)
+    }
+    return map
+  }
+
+  /** The entry a given device already added (cleans up stale mappings). */
+  getEntryForDevice(wheelId: string, deviceId?: string | null): WheelEntry | null {
+    if (!deviceId) {
+      return null
+    }
+    const wheel = this.wheels.get(wheelId)
+    const map = this.deviceIndex.get(wheelId)
+    const entryId = map?.get(deviceId)
+    if (!wheel || !entryId) {
+      return null
+    }
+    const entry = wheel.entries.find((item) => item.id === entryId) ?? null
+    if (!entry) {
+      // Entry was removed by the host — free the device to join again.
+      map?.delete(deviceId)
+    }
+    return entry
+  }
 
   private createWheel(): WheelState {
     const wheel: WheelState = {
@@ -50,6 +81,7 @@ class WheelService {
   resetActiveWheel(): WheelState {
     if (this.activeWheelId) {
       this.wheels.delete(this.activeWheelId)
+      this.deviceIndex.delete(this.activeWheelId)
     }
     return this.createWheel()
   }
@@ -62,13 +94,26 @@ class WheelService {
     wheelId: string,
     rawName: string,
     source: WheelEntrySource,
-  ): WheelState | { error: string } {
+    deviceId?: string | null,
+  ): WheelAddEntryResult {
     const wheel = this.wheels.get(wheelId)
     if (!wheel) {
       return { error: 'Wheel not found. Ask the host for a new QR code.' }
     }
     if (wheel.isSpinning) {
       return { error: 'The wheel is spinning — try again in a few seconds.' }
+    }
+
+    // One entry per device: a refresh or QR re-scan cannot add a second name.
+    // (Host-added names are exempt — the host manages the list manually.)
+    if (source === 'participant') {
+      const existing = this.getEntryForDevice(wheelId, deviceId)
+      if (existing) {
+        return {
+          error: `This device already put "${existing.name}" on the wheel.`,
+          yourEntry: existing,
+        }
+      }
     }
 
     const name = rawName.trim().slice(0, MAX_NAME_LENGTH)
@@ -82,7 +127,11 @@ class WheelService {
       return { error: `"${name}" is already on the wheel.` }
     }
 
-    wheel.entries.push({ id: generateId('entry'), name, source })
+    const entry: WheelEntry = { id: generateId('entry'), name, source }
+    wheel.entries.push(entry)
+    if (source === 'participant' && deviceId) {
+      this.deviceMapOf(wheelId).set(deviceId, entry.id)
+    }
     return wheel
   }
 
@@ -95,6 +144,15 @@ class WheelService {
       return { error: 'Cannot edit names while the wheel is spinning.' }
     }
     wheel.entries = wheel.entries.filter((entry) => entry.id !== entryId)
+    // Free the device slot so a removed participant may join again.
+    const deviceMap = this.deviceIndex.get(wheelId)
+    if (deviceMap) {
+      for (const [device, mappedEntryId] of deviceMap.entries()) {
+        if (mappedEntryId === entryId) {
+          deviceMap.delete(device)
+        }
+      }
+    }
     return wheel
   }
 
@@ -108,6 +166,7 @@ class WheelService {
     }
     wheel.entries = []
     wheel.lastWinner = null
+    this.deviceIndex.delete(wheelId)
     return wheel
   }
 

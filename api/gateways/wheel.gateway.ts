@@ -1,5 +1,10 @@
 import type { Server } from 'socket.io'
-import type { WheelEntrySource, WheelState } from '../../shared/types/wheel.js'
+import type {
+  WheelAddEntryResult,
+  WheelEntrySource,
+  WheelJoinResult,
+  WheelState,
+} from '../../shared/types/wheel.js'
 import { wheelService } from '../modules/wheel/wheel.service.js'
 
 function roomOf(wheelId: string) {
@@ -24,27 +29,41 @@ export function registerWheelGateway(io: Server) {
       callback?.(state)
     })
 
-    // Participant joins an existing wheel via the QR link.
+    // Participant joins an existing wheel via the QR link. The response includes
+    // this device's existing entry so a refreshed page restores its joined state.
     socket.on(
       'wheel:join',
-      ({ wheelId }: { wheelId: string }, callback?: (result: WheelState | { error: string }) => void) => {
+      (
+        { wheelId, deviceId }: { wheelId: string; deviceId?: string },
+        callback?: (result: WheelJoinResult | { error: string }) => void,
+      ) => {
         const state = wheelService.getWheel(wheelId)
         if (!state) {
           callback?.({ error: 'Wheel not found. Ask the host for a new QR code.' })
           return
         }
         socket.join(roomOf(wheelId))
-        callback?.(state)
+        callback?.({ state, yourEntry: wheelService.getEntryForDevice(wheelId, deviceId) })
       },
     )
 
     socket.on(
       'wheel:add-entry',
       (
-        { wheelId, name, source }: { wheelId: string; name: string; source: WheelEntrySource },
-        callback?: (result: WheelState | { error: string }) => void,
+        {
+          wheelId,
+          name,
+          source,
+          deviceId,
+        }: { wheelId: string; name: string; source: WheelEntrySource; deviceId?: string },
+        callback?: (result: WheelAddEntryResult) => void,
       ) => {
-        const result = wheelService.addEntry(wheelId, name ?? '', source === 'admin' ? 'admin' : 'participant')
+        const result = wheelService.addEntry(
+          wheelId,
+          name ?? '',
+          source === 'admin' ? 'admin' : 'participant',
+          deviceId,
+        )
         if (!('error' in result)) {
           broadcastState(result)
         }

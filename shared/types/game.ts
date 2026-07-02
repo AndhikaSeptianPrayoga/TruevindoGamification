@@ -96,6 +96,8 @@ export interface SessionState {
 export interface JoinSessionRequest {
   pinCode: string
   displayName: string
+  /** Stable per-device id so a refresh re-joins as the same participant. */
+  deviceId?: string
 }
 
 export interface JoinSessionResponse {

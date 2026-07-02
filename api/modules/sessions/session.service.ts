@@ -26,6 +26,8 @@ class SessionService {
   private pinIndex = new Map<string, string>()
   private answerLedger = new Map<string, Map<string, SubmitAnswerPayload>>()
   private quizCache = new Map<string, QuizDetail>()
+  /** sessionId -> deviceId -> participantId. Lets a refreshed device re-join as itself. */
+  private deviceParticipants = new Map<string, Map<string, string>>()
 
   constructor() {
     this.state = this.createDefaultSession()
@@ -253,9 +255,45 @@ class SessionService {
     }
 
     const base = this.getSessionOrThrow(sessionId)
+    const deviceId = payload.deviceId
+    let deviceMap = this.deviceParticipants.get(sessionId)
+    if (!deviceMap) {
+      deviceMap = new Map<string, string>()
+      this.deviceParticipants.set(sessionId, deviceMap)
+    }
+
+    // A refreshed device re-joins as its existing participant (score preserved,
+    // no duplicate entry) — regardless of the name typed the second time.
+    if (deviceId) {
+      const mappedId = deviceMap.get(deviceId)
+      if (mappedId && base.participants.some((participant) => participant.id === mappedId)) {
+        return { participantId: mappedId, sessionId: base.sessionId, sessionState: base }
+      }
+    }
+
     const participantId = `participant-${payload.displayName.toLowerCase().replace(/\s+/g, '-')}`
+    const existing = base.participants.find((participant) => participant.id === participantId)
+
+    if (existing) {
+      // The name is already in use. If it belongs to another device, reject it —
+      // re-creating it would silently reset that participant's score.
+      const ownerDevice = [...deviceMap.entries()].find(([, id]) => id === participantId)?.[0]
+      if (ownerDevice && deviceId && ownerDevice !== deviceId) {
+        throw new Error('Nama tersebut sudah dipakai peserta lain di sesi ini')
+      }
+      // Same device (or unknown owner after a restart): reclaim the identity
+      // without resetting the existing score.
+      if (deviceId) {
+        deviceMap.set(deviceId, participantId)
+      }
+      return { participantId, sessionId: base.sessionId, sessionState: base }
+    }
+
     const nextState = this.createJoinState(participantId, payload.displayName, base)
     this.registerSession(nextState)
+    if (deviceId) {
+      deviceMap.set(deviceId, participantId)
+    }
     sessionPersistenceService.recordParticipantJoin(nextState)
 
     return {

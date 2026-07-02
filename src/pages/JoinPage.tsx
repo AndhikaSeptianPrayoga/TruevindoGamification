@@ -5,6 +5,7 @@ import { AppShell } from '@/components/common/AppShell'
 import { StatCard } from '@/components/common/StatCard'
 import { joinSession } from '@/utils/api'
 import { useParticipantStore } from '@/stores/useParticipantStore'
+import { getDeviceId } from '@/utils/device'
 import { sound } from '@/utils/sound'
 
 export default function JoinPage() {
@@ -23,7 +24,7 @@ export default function JoinPage() {
     try {
       setIsLoading(true)
       setError('')
-      const payload = await joinSession({ pinCode, displayName })
+      const payload = await joinSession({ pinCode, displayName, deviceId: getDeviceId() })
       setParticipantSession(payload.participantId, payload.sessionState)
       navigate(`/lobby/${payload.sessionId}`)
     } catch (joinError) {

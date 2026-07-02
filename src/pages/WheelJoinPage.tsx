@@ -1,7 +1,7 @@
 import { ArrowRight, CheckCircle2, Sparkles } from 'lucide-react'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
-import type { WheelSpinPayload, WheelState } from '@shared/types/wheel'
+import type { WheelEntry, WheelSpinPayload, WheelState } from '@shared/types/wheel'
 import { AppShell } from '@/components/common/AppShell'
 import { Confetti } from '@/components/common/Confetti'
 import { WheelOfNames } from '@/components/wheel/WheelOfNames'
@@ -12,7 +12,7 @@ export default function WheelJoinPage() {
   const { wheelId = '' } = useParams()
   const [wheel, setWheel] = useState<WheelState | null>(null)
   const [name, setName] = useState('')
-  const [joinedName, setJoinedName] = useState<string | null>(null)
+  const [joinedEntry, setJoinedEntry] = useState<WheelEntry | null>(null)
   const [notice, setNotice] = useState('')
   const [loadError, setLoadError] = useState('')
   const [activeSpin, setActiveSpin] = useState<WheelSpinPayload | null>(null)
@@ -23,6 +23,13 @@ export default function WheelJoinPage() {
     wheelId,
     role: 'participant',
     onState: setWheel,
+    // After a refresh or QR re-scan, the server recognizes this device and
+    // restores the joined state instead of allowing a second entry.
+    onJoined: (yourEntry) => {
+      if (yourEntry) {
+        setJoinedEntry(yourEntry)
+      }
+    },
     onSpin: (payload) => {
       setWinnerName(null)
       setActiveSpin(payload)
@@ -32,6 +39,15 @@ export default function WheelJoinPage() {
   })
 
   const entries = wheel?.entries ?? []
+  const joinedName = joinedEntry?.name ?? null
+
+  // If the host removes this device's entry, return to the join form.
+  useEffect(() => {
+    if (joinedEntry && wheel && !wheel.entries.some((entry) => entry.id === joinedEntry.id)) {
+      setJoinedEntry(null)
+      setNotice('The host removed your name — you can join again.')
+    }
+  }, [wheel, joinedEntry])
 
   async function handleJoin() {
     const trimmed = name.trim()
@@ -43,12 +59,21 @@ export default function WheelJoinPage() {
     setIsJoining(true)
     const result = await addEntry(trimmed, 'participant')
     setIsJoining(false)
-    if (result && 'error' in result) {
+    if ('error' in result) {
+      // Already joined from this device — restore that entry instead of duplicating.
+      if (result.yourEntry) {
+        setJoinedEntry(result.yourEntry)
+        setNotice('')
+        return
+      }
       setNotice(result.error)
       return
     }
     setNotice('')
-    setJoinedName(trimmed)
+    const mine = result.entries.find(
+      (entry) => entry.source === 'participant' && entry.name === trimmed,
+    )
+    setJoinedEntry(mine ?? { id: 'local', name: trimmed, source: 'participant' })
     sound.select()
     sound.vibrate(25)
   }

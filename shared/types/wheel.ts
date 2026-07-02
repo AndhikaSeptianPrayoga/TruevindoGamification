@@ -26,3 +26,12 @@ export interface WheelState {
 export interface WheelActionError {
   error: string
 }
+
+/** wheel:join response — includes this device's existing entry, if any. */
+export interface WheelJoinResult {
+  state: WheelState
+  yourEntry: WheelEntry | null
+}
+
+/** wheel:add-entry response; on "already joined" the existing entry is returned. */
+export type WheelAddEntryResult = WheelState | { error: string; yourEntry?: WheelEntry }

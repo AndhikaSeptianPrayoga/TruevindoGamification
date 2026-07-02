@@ -1,10 +1,14 @@
 import { useEffect, useMemo, useRef } from 'react'
 import { io } from 'socket.io-client'
 import type {
+  WheelAddEntryResult,
+  WheelEntry,
   WheelEntrySource,
+  WheelJoinResult,
   WheelSpinPayload,
   WheelState,
 } from '@shared/types/wheel'
+import { getDeviceId } from '@/utils/device'
 
 interface UseWheelSocketOptions {
   /** Required for participants; ignored for the admin (the server resolves the active wheel). */
@@ -12,22 +16,27 @@ interface UseWheelSocketOptions {
   role: 'admin' | 'participant'
   onState?: (state: WheelState) => void
   onSpin?: (payload: WheelSpinPayload) => void
+  /** Fired after joining with this device's existing entry (null if none) — restores state after a refresh. */
+  onJoined?: (yourEntry: WheelEntry | null) => void
   onError?: (message: string) => void
 }
 
 type WheelResult = WheelState | { error: string }
 
-export function useWheelSocket({ wheelId, role, onState, onSpin, onError }: UseWheelSocketOptions) {
+export function useWheelSocket({ wheelId, role, onState, onSpin, onJoined, onError }: UseWheelSocketOptions) {
   const onStateRef = useRef(onState)
   const onSpinRef = useRef(onSpin)
+  const onJoinedRef = useRef(onJoined)
   const onErrorRef = useRef(onError)
   const wheelIdRef = useRef<string | null>(wheelId ?? null)
+  const deviceId = useMemo(getDeviceId, [])
 
   useEffect(() => {
     onStateRef.current = onState
     onSpinRef.current = onSpin
+    onJoinedRef.current = onJoined
     onErrorRef.current = onError
-  }, [onState, onSpin, onError])
+  }, [onState, onSpin, onJoined, onError])
 
   const socket = useMemo(
     () =>
@@ -54,12 +63,13 @@ export function useWheelSocket({ wheelId, role, onState, onSpin, onError }: UseW
     if (role === 'admin') {
       socket.emit('wheel:ensure', handleState)
     } else if (wheelId) {
-      socket.emit('wheel:join', { wheelId }, (result: WheelResult) => {
+      socket.emit('wheel:join', { wheelId, deviceId }, (result: WheelJoinResult | { error: string }) => {
         if ('error' in result) {
           onErrorRef.current?.(result.error)
           return
         }
-        handleState(result)
+        handleState(result.state)
+        onJoinedRef.current?.(result.yourEntry)
       })
     }
 
@@ -68,7 +78,7 @@ export function useWheelSocket({ wheelId, role, onState, onSpin, onError }: UseW
       socket.off('wheel:spin', handleSpin)
       socket.disconnect()
     }
-  }, [role, socket, wheelId])
+  }, [deviceId, role, socket, wheelId])
 
   function withWheel<T>(emit: (currentWheelId: string) => T) {
     const current = wheelIdRef.current
@@ -81,8 +91,10 @@ export function useWheelSocket({ wheelId, role, onState, onSpin, onError }: UseW
 
   return {
     addEntry: (name: string, source: WheelEntrySource) =>
-      new Promise<WheelResult>((resolve) => {
-        withWheel((id) => socket.emit('wheel:add-entry', { wheelId: id, name, source }, resolve))
+      new Promise<WheelAddEntryResult>((resolve) => {
+        withWheel((id) =>
+          socket.emit('wheel:add-entry', { wheelId: id, name, source, deviceId }, resolve),
+        )
       }),
     removeEntry: (entryId: string) =>
       new Promise<WheelResult>((resolve) => {
