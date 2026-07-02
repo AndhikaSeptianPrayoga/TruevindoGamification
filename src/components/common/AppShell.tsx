@@ -22,14 +22,18 @@ export function AppShell({
     <div className="page-shell min-h-screen text-ink">
       <div className="hero-orb hero-orb-red absolute left-[-8rem] top-[-4rem] h-72 w-72" />
       <div className="hero-orb hero-orb-blue absolute right-[-7rem] top-20 h-80 w-80" />
-      <div className="mx-auto flex min-h-screen max-w-7xl flex-col gap-6 px-4 py-6 sm:gap-8 sm:px-6 sm:py-8 lg:px-10">
+      <div className="mx-auto flex min-h-screen max-w-7xl flex-col gap-5 px-4 py-6 sm:gap-6 sm:px-6 sm:py-8 lg:px-10">
+        {/* Event masthead — centered, consistent size on every page (per the
+            DIGICON reference, the brand sits top-center above all content). */}
+        <div className="flex justify-center pt-1">
+          <img
+            src={hondaDigiconLogo}
+            alt="Honda DIGICON 2026"
+            className="h-16 w-auto object-contain drop-shadow-sm sm:h-20 md:h-24"
+          />
+        </div>
         <header className="panel-elevated relative flex flex-col gap-6 px-4 py-5 sm:gap-8 sm:px-6 sm:py-6 xl:flex-row xl:items-end xl:justify-between">
           <div className="space-y-4">
-            <img
-              src={hondaDigiconLogo}
-              alt="Honda DIGICON 2026"
-              className="h-12 w-auto object-contain sm:h-14 md:h-16"
-            />
             <div className="flex flex-wrap items-center gap-3">
               <p className="kicker">{eyebrow}</p>
               <span className="pill-tag">Professional Tech Experience</span>
