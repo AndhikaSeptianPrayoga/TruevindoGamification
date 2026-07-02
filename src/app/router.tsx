@@ -12,6 +12,8 @@ import PlayPage from '@/pages/PlayPage'
 import QuizEditorPage from '@/pages/QuizEditorPage'
 import QuizListPage from '@/pages/QuizListPage'
 import ResultPage from '@/pages/ResultPage'
+import MiniGamesHostPage from '@/pages/MiniGamesHostPage'
+import MiniGamesPlayPage from '@/pages/MiniGamesPlayPage'
 import SpamHostPage from '@/pages/SpamHostPage'
 import SpamPlayPage from '@/pages/SpamPlayPage'
 import WheelHostPage from '@/pages/WheelHostPage'
@@ -30,6 +32,7 @@ export function AppRouter() {
         <Route path="/finished/:sessionId" element={<ParticipantFinishedPage />} />
         <Route path="/wheel/:wheelId" element={<WheelJoinPage />} />
         <Route path="/spam/:gameId" element={<SpamPlayPage />} />
+        <Route path="/minigames/:eventId" element={<MiniGamesPlayPage />} />
         <Route path="/admin/login" element={<AdminLoginPage />} />
         <Route
           path="/admin/wheel"
@@ -44,6 +47,14 @@ export function AppRouter() {
           element={
             <ProtectedAdminRoute>
               <SpamHostPage />
+            </ProtectedAdminRoute>
+          }
+        />
+        <Route
+          path="/admin/minigames"
+          element={
+            <ProtectedAdminRoute>
+              <MiniGamesHostPage />
             </ProtectedAdminRoute>
           }
         />
