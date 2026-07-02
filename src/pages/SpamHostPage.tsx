@@ -1,4 +1,4 @@
-import { Keyboard, Play, RotateCcw, Square, Trash2, Trophy, Users, X, Zap } from 'lucide-react'
+import { ChevronDown, ChevronUp, Keyboard, Play, RotateCcw, Square, Trash2, Trophy, Users, X, Zap } from 'lucide-react'
 import { useEffect, useRef, useState } from 'react'
 import { QRCodeSVG } from 'qrcode.react'
 import type { SpamEndedPayload, SpamGameState } from '@shared/types/spam'
@@ -27,7 +27,36 @@ export default function SpamHostPage() {
   const [targetsInput, setTargetsInput] = useState('')
   const clockOffsetRef = useRef(0)
   const formSyncedRef = useRef(false)
+  // Score-bump + rank-movement tracking for the live leaderboard.
+  const prevBoardRef = useRef(new Map<string, { score: number; rank: number }>())
+  const [bumps, setBumps] = useState<Set<string>>(new Set())
+  const [rankMoves, setRankMoves] = useState<Map<string, 'up' | 'down'>>(new Map())
   useTicker(100)
+
+  useEffect(() => {
+    const board = game?.leaderboard ?? []
+    const previous = prevBoardRef.current
+    const nextBumps = new Set<string>()
+    const nextMoves = new Map<string, 'up' | 'down'>()
+    for (const player of board) {
+      const old = previous.get(player.id)
+      if (old && player.score > old.score) {
+        nextBumps.add(player.id)
+      }
+      if (old && player.rank !== old.rank) {
+        nextMoves.set(player.id, player.rank < old.rank ? 'up' : 'down')
+      }
+    }
+    prevBoardRef.current = new Map(board.map((p) => [p.id, { score: p.score, rank: p.rank }]))
+    if (nextMoves.size) {
+      setRankMoves(nextMoves)
+    }
+    if (nextBumps.size) {
+      setBumps(nextBumps)
+      const timer = setTimeout(() => setBumps(new Set()), 500)
+      return () => clearTimeout(timer)
+    }
+  }, [game?.leaderboard])
 
   const { configure, start, stop, resetGame, resetTime, kick } = useSpamSocket({
     role: 'admin',
@@ -240,39 +269,81 @@ export default function SpamHostPage() {
                 <Trophy className="h-4 w-4 text-amber-500" />
               </div>
               <ul className="mt-4 grid max-h-[28rem] gap-2 overflow-y-auto pr-1">
-                {(game?.leaderboard ?? []).slice(0, 30).map((player) => (
-                  <li
-                    key={`${player.id}-${player.score}`}
-                    className={`spam-bump list-item-soft flex items-center justify-between gap-3 py-3 ${
-                      player.rank <= 3 ? 'border-amber-300/60' : ''
-                    }`}
-                  >
-                    <div className="flex min-w-0 items-center gap-3">
-                      <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-slate-950 text-sm font-semibold text-white">
-                        {player.rank === 1 ? '🥇' : player.rank === 2 ? '🥈' : player.rank === 3 ? '🥉' : player.rank}
-                      </span>
-                      <span className="truncate text-sm font-semibold text-slate-950">
-                        {player.name}
-                        {!player.connected ? (
-                          <span className="ml-2 text-[10px] uppercase tracking-[0.2em] text-slate-400">offline</span>
-                        ) : null}
-                      </span>
-                    </div>
-                    <div className="flex shrink-0 items-center gap-3">
-                      <span className="font-display text-lg font-bold tabular-nums text-slate-950">
-                        {player.score}
-                      </span>
-                      <button
-                        type="button"
-                        onClick={() => kick(player.id)}
-                        aria-label={`Remove ${player.name} from the game`}
-                        className="rounded-lg border border-red-200 p-1.5 text-red-600 transition hover:bg-red-50"
+                {(() => {
+                  const board = (game?.leaderboard ?? []).slice(0, 30)
+                  const topScore = Math.max(board[0]?.score ?? 0, 1)
+                  return board.map((player) => {
+                    const rowTone =
+                      player.rank === 1
+                        ? 'border-amber-300/80 bg-gradient-to-r from-amber-50 to-white'
+                        : player.rank === 2
+                          ? 'border-slate-300/80 bg-gradient-to-r from-slate-100 to-white'
+                          : player.rank === 3
+                            ? 'border-orange-300/70 bg-gradient-to-r from-orange-50 to-white'
+                            : 'border-slate-200/80 bg-white'
+                    const move = rankMoves.get(player.id)
+                    return (
+                      <li
+                        key={player.id}
+                        className={`relative overflow-hidden rounded-[24px] border px-4 py-3 shadow-[0_10px_28px_rgba(15,23,42,0.05)] ${rowTone} ${
+                          bumps.has(player.id) ? 'spam-bump' : ''
+                        }`}
                       >
-                        <X className="h-3.5 w-3.5" />
-                      </button>
-                    </div>
-                  </li>
-                ))}
+                        {/* Score progress bar relative to the leader */}
+                        <div
+                          className="absolute inset-y-0 left-0 rounded-r-full bg-signal/10 transition-all duration-300"
+                          style={{ width: `${Math.min(100, (player.score / topScore) * 100)}%` }}
+                          aria-hidden
+                        />
+                        <div className="relative flex items-center justify-between gap-3">
+                          <div className="flex min-w-0 items-center gap-3">
+                            <span
+                              className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-full font-display text-base font-bold ${
+                                player.rank === 1
+                                  ? 'bg-amber-400 text-white shadow-[0_8px_20px_rgba(245,158,11,0.4)]'
+                                  : player.rank === 2
+                                    ? 'bg-slate-400 text-white'
+                                    : player.rank === 3
+                                      ? 'bg-orange-400 text-white'
+                                      : 'bg-slate-950 text-white'
+                              }`}
+                            >
+                              {player.rank === 1 ? '🥇' : player.rank === 2 ? '🥈' : player.rank === 3 ? '🥉' : player.rank}
+                            </span>
+                            <div className="min-w-0">
+                              <p className="truncate text-base font-bold text-slate-950">{player.name}</p>
+                              <p className="flex items-center gap-1 text-[10px] font-semibold uppercase tracking-[0.2em] text-slate-400">
+                                {move === 'up' ? (
+                                  <span className="inline-flex items-center text-green-600">
+                                    <ChevronUp className="h-3 w-3" /> up
+                                  </span>
+                                ) : move === 'down' ? (
+                                  <span className="inline-flex items-center text-red-500">
+                                    <ChevronDown className="h-3 w-3" /> down
+                                  </span>
+                                ) : null}
+                                {!player.connected ? <span>offline</span> : move ? null : <span>#{player.rank}</span>}
+                              </p>
+                            </div>
+                          </div>
+                          <div className="flex shrink-0 items-center gap-3">
+                            <span className="font-display text-2xl font-bold tabular-nums text-slate-950">
+                              {player.score}
+                            </span>
+                            <button
+                              type="button"
+                              onClick={() => kick(player.id)}
+                              aria-label={`Remove ${player.name} from the game`}
+                              className="rounded-lg border border-red-200 p-1.5 text-red-600 transition hover:bg-red-50"
+                            >
+                              <X className="h-3.5 w-3.5" />
+                            </button>
+                          </div>
+                        </div>
+                      </li>
+                    )
+                  })
+                })()}
                 {(game?.leaderboard.length ?? 0) === 0 ? (
                   <li className="rounded-2xl border border-dashed border-slate-300 px-4 py-6 text-center text-sm text-slate-500">
                     No players yet — share the QR code to begin!

@@ -42,6 +42,9 @@ export default function SpamPlayPage() {
   const [currentWord, setCurrentWord] = useState('')
   const [typed, setTyped] = useState('')
   const [combo, setCombo] = useState(0)
+  const [streak, setStreak] = useState(0)
+  const [bestStreak, setBestStreak] = useState(0)
+  const [milestone, setMilestone] = useState('')
   const [warning, setWarning] = useState('')
   const [flash, setFlash] = useState<'good' | 'bad' | null>(null)
   const [ended, setEnded] = useState<SpamEndedPayload | null>(null)
@@ -64,6 +67,9 @@ export default function SpamPlayPage() {
         if (previous?.status !== 'starting' && state.status === 'starting') {
           setMyScore(0)
           setCombo(0)
+          setStreak(0)
+          setBestStreak(0)
+          setMilestone('')
           setMyRank(null)
           setEnded(null)
           setTyped('')
@@ -124,8 +130,10 @@ export default function SpamPlayPage() {
 
   function flashBad(message?: string) {
     setFlash('bad')
-    setTimeout(() => setFlash(null), 250)
+    setTimeout(() => setFlash(null), 300)
     sound.miss()
+    // A wrong keystroke breaks the streak (the combo has its own idle timer).
+    setStreak(0)
     if (message) {
       setWarning(message)
       setTimeout(() => setWarning(''), 1400)
@@ -218,6 +226,18 @@ export default function SpamPlayPage() {
         clearTimeout(comboTimerRef.current)
       }
       comboTimerRef.current = setTimeout(() => setCombo(0), 1200)
+      // Streak = consecutive correct words without a single wrong keystroke.
+      setStreak((previous) => {
+        const next = previous + 1
+        setBestStreak((best) => Math.max(best, next))
+        if (next === 5 || next === 10 || (next > 10 && next % 10 === 0)) {
+          setMilestone(next >= 20 ? `🔥 UNSTOPPABLE — ${next} STREAK!` : next >= 10 ? `🔥 ON FIRE — ${next} STREAK!` : `⚡ ${next} STREAK!`)
+          sound.correct()
+          sound.vibrate([0, 30, 40, 30])
+          setTimeout(() => setMilestone(''), 1600)
+        }
+        return next
+      })
       setFlash('good')
       setTimeout(() => setFlash(null), 120)
       spawnPlus()
@@ -317,11 +337,49 @@ export default function SpamPlayPage() {
               </div>
 
               {/* Target word + input */}
-              <section className="panel-elevated p-6 text-center">
-                <p className="kicker">Type This Word</p>
-                <p className="mt-2 select-none break-all font-display text-5xl font-black tracking-tight text-signal md:text-6xl">
-                  {currentWord || '—'}
+              <section className="panel-elevated relative overflow-hidden p-6 text-center">
+                <div className="flex items-center justify-between">
+                  <p className="kicker">Type This Word</p>
+                  {streak >= 2 ? (
+                    <span
+                      className={`inline-flex items-center gap-1 rounded-full px-3 py-1 text-xs font-bold ${
+                        streak >= 10
+                          ? 'bg-red-500/15 text-red-600'
+                          : streak >= 5
+                            ? 'bg-orange-500/15 text-orange-600'
+                            : 'bg-amber-500/15 text-amber-600'
+                      }`}
+                    >
+                      <Flame className="h-3.5 w-3.5" />
+                      Streak {streak}
+                    </span>
+                  ) : null}
+                </div>
+                <p
+                  key={currentWord}
+                  className="animate-pop-in mt-3 select-none break-all font-display text-5xl font-black uppercase tracking-[0.12em] md:text-6xl"
+                  aria-label={`Type the word ${currentWord}`}
+                >
+                  {(currentWord || '—').split('').map((letter, index) => {
+                    const isTyped = index < typed.trim().length
+                    return (
+                      <span
+                        key={`${index}-${letter}`}
+                        className={`inline-block transition-all duration-100 ${
+                          isTyped ? 'scale-110 text-green-600' : 'bg-gradient-to-br from-signal to-accent bg-clip-text text-transparent'
+                        }`}
+                      >
+                        {letter}
+                      </span>
+                    )
+                  })}
                 </p>
+
+                {milestone ? (
+                  <p className="milestone-pop mt-3 font-display text-2xl font-black text-orange-600">
+                    {milestone}
+                  </p>
+                ) : null}
 
                 <input
                   ref={inputRef}
@@ -349,11 +407,11 @@ export default function SpamPlayPage() {
                   autoComplete="off"
                   spellCheck={false}
                   aria-label="Type the target word here"
-                  className={`brand-input mt-5 text-center text-xl font-semibold transition-shadow ${
+                  className={`brand-input mt-5 text-center font-display text-2xl font-bold tracking-[0.08em] transition-shadow ${
                     flash === 'good'
                       ? 'ring-4 ring-green-400/50'
                       : flash === 'bad'
-                        ? 'ring-4 ring-red-400/60'
+                        ? 'input-shake ring-4 ring-red-400/60'
                         : ''
                   }`}
                 />
@@ -398,6 +456,11 @@ export default function SpamPlayPage() {
                   </p>
                 ) : null
               })()}
+              {bestStreak >= 3 ? (
+                <p className="mt-2 inline-flex items-center gap-1.5 rounded-full bg-amber-500/15 px-4 py-1.5 text-sm font-bold text-amber-700">
+                  <Flame className="h-4 w-4" /> Best streak: {bestStreak} in a row
+                </p>
+              ) : null}
               {ended.winner ? (
                 <p className="mt-4 text-sm text-slate-600">
                   🏆 Winner: <b className="text-slate-950">{ended.winner.name}</b> ({ended.winner.score})
