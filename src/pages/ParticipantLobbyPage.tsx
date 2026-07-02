@@ -16,7 +16,7 @@ export default function ParticipantLobbyPage() {
     sessionId,
     onState: (state) => {
       setSessionState(state)
-      if (state.status === 'countdown' || state.status === 'question_live') {
+      if (state.status === 'question_live') {
         navigate(`/play/${sessionId}`)
       }
     },
@@ -27,7 +27,7 @@ export default function ParticipantLobbyPage() {
       getPlayerState(sessionId)
         .then((state) => {
           setSessionState(state)
-          if (state.status === 'countdown' || state.status === 'question_live') {
+          if (state.status === 'question_live') {
             navigate(`/play/${sessionId}`)
           }
         })

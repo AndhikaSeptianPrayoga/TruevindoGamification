@@ -3,7 +3,6 @@ import { useNavigate, useParams } from 'react-router-dom'
 import { AdminSidebar } from '@/components/admin/AdminSidebar'
 import { AppShell } from '@/components/common/AppShell'
 import { StatCard } from '@/components/common/StatCard'
-import { CountdownOverlay } from '@/components/participant/CountdownOverlay'
 import { LiveLeaderboard } from '@/components/host/LiveLeaderboard'
 import { useCountdown } from '@/hooks/useCountdown'
 import { useSessionSocket } from '@/hooks/useSessionSocket'
@@ -55,10 +54,6 @@ export default function HostLivePage() {
     navigate(`/admin/sessions/${nextState.sessionId}/summary`)
   }
 
-  if (activeSession?.status === 'countdown') {
-    return <CountdownOverlay />
-  }
-
   return (
     <AppShell
       eyebrow="Host Live"
@@ -93,7 +88,7 @@ export default function HostLivePage() {
                 <img
                   src={question.imageUrl}
                   alt={question.text}
-                  className="h-72 w-full object-cover"
+                  className="mx-auto h-auto max-h-[55vh] w-full object-contain md:max-h-[420px]"
                 />
               </div>
             ) : null}

@@ -1,4 +1,3 @@
-import { Check } from 'lucide-react'
 import type { AnswerOption } from '@shared/types/game'
 
 interface AnswerOptionCardProps {
@@ -53,20 +52,13 @@ export function AnswerOptionCard({
       type="button"
       disabled={disabled}
       onClick={onClick}
-      className={`relative min-h-[118px] rounded-[30px] border px-5 py-5 text-left transition-all duration-200 ${
+      className={`min-h-[118px] rounded-[30px] border px-5 py-5 text-left transition duration-200 ${
         selected
-          ? 'scale-[1.02] border-slate-950/10 bg-slate-950 text-white shadow-float ring-4 ring-signal/20'
-          : 'border-slate-200/85 bg-white text-slate-900 shadow-[0_16px_36px_rgba(15,23,42,0.07)] hover:-translate-y-0.5 hover:border-signal/35 hover:shadow-[0_22px_52px_rgba(29,78,216,0.12)] active:scale-[0.98]'
-      } ${disabled && !selected ? 'cursor-not-allowed opacity-45' : ''} ${
-        disabled ? 'cursor-default' : ''
-      }`}
+          ? 'border-slate-950/10 bg-slate-950 text-white shadow-float ring-4 ring-slate-950/5'
+          : 'border-slate-200/85 bg-gradient-to-br text-slate-900 shadow-[0_16px_36px_rgba(15,23,42,0.07)] hover:-translate-y-0.5 hover:border-signal/35 hover:shadow-[0_22px_52px_rgba(29,78,216,0.12)]'
+      } ${accent.surface} ${selected ? '' : accent.ring} ${disabled ? 'cursor-not-allowed opacity-60' : ''}`}
       aria-label={`Choose option ${option}: ${text}`}
     >
-      {selected ? (
-        <span className="animate-pop-in absolute right-4 top-4 flex h-8 w-8 items-center justify-center rounded-full bg-white text-slate-950 shadow-lg">
-          <Check className="h-5 w-5" strokeWidth={3} />
-        </span>
-      ) : null}
       <div className="flex items-center gap-4">
         <span
           className={`flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl font-display text-2xl font-bold ${

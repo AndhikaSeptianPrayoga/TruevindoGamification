@@ -37,10 +37,14 @@ export function AppShell({
           {aside ? <div className="w-full xl:max-w-md">{aside}</div> : null}
         </header>
         <main className="flex-1">{children}</main>
-        <footer className="mt-2 flex flex-col items-center gap-4 overflow-hidden rounded-[32px] bg-gradient-to-r from-slate-950 via-slate-900 to-slate-950 px-4 py-6 shadow-[0_28px_80px_rgba(2,6,23,0.34)] sm:px-6">
-          <div className="flex flex-wrap items-center justify-center gap-6 sm:gap-10">
+        <footer className="relative mt-2 flex flex-col items-center gap-4 overflow-hidden rounded-[32px] border border-slate-800/80 bg-gradient-to-r from-slate-950 via-slate-900 to-slate-950 px-4 py-5 shadow-[0_28px_80px_rgba(2,6,23,0.34)] sm:px-6 sm:py-6">
+          <div className="absolute inset-x-10 top-0 h-px bg-gradient-to-r from-transparent via-white/35 to-transparent" />
+          <div className="w-full max-w-xl rounded-[28px] border border-white/12 bg-black/55 px-4 py-4 shadow-[inset_0_1px_0_rgba(255,255,255,0.08),0_18px_40px_rgba(0,0,0,0.28)] sm:px-6 sm:py-5">
+            <div className="flex flex-wrap items-center justify-center gap-4 sm:gap-6">
             <img src={truevindoLogo} alt="Truevindo" className="h-8 w-auto object-contain sm:h-9 md:h-11" />
+            <span className="hidden h-9 w-px bg-white/20 sm:block" aria-hidden />
             <img src={gimflyLogo} alt="Gimfly Studio" className="h-8 w-auto object-contain sm:h-9 md:h-11" />
+            </div>
           </div>
           <p className="text-center text-[11px] uppercase tracking-[0.18em] text-slate-100/90 sm:text-xs sm:tracking-[0.25em]">
             Future-ready experience by Truevindo &amp; Gimfly Studio
