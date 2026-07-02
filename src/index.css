@@ -29,12 +29,13 @@ body {
   margin: 0;
   min-width: 320px;
   min-height: 100vh;
-  background:
-    radial-gradient(circle at top left, rgba(239, 35, 60, 0.08), transparent 28%),
-    radial-gradient(circle at top right, rgba(29, 78, 216, 0.1), transparent 28%),
-    linear-gradient(180deg, #f8fbff 0%, #eef4ff 44%, #ffffff 100%);
+  background: #f8fbff;
   color: #0f172a;
   position: relative;
+  /* Make body a stacking context so the fixed background artwork (negative
+     z-index pseudo-elements below) paints ABOVE body's background but UNDER
+     all content. Without this, the opaque background hides the artwork. */
+  isolation: isolate;
 }
 
 * {
@@ -70,14 +71,16 @@ body::before {
   background: url('./assets/Img/background img.png') center bottom / cover no-repeat;
 }
 
-/* Soft white veil that dims the artwork so content always stays readable. */
+/* Soft white veil that dims the artwork so content always stays readable —
+   stronger at the top (where text sits), lighter at the bottom so the flowing
+   pixel streams stay visible as a decorative frame. */
 body::after {
   z-index: -1;
   background: linear-gradient(
     180deg,
-    rgba(248, 251, 255, 0.92) 0%,
-    rgba(248, 251, 255, 0.72) 38%,
-    rgba(255, 255, 255, 0.42) 100%
+    rgba(248, 251, 255, 0.88) 0%,
+    rgba(248, 251, 255, 0.6) 40%,
+    rgba(255, 255, 255, 0.24) 100%
   );
 }
 
@@ -99,18 +102,6 @@ body::after {
   .page-shell {
     position: relative;
     overflow: hidden;
-  }
-
-  .page-shell::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    pointer-events: none;
-    background-image:
-      linear-gradient(rgba(148, 163, 184, 0.08) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(148, 163, 184, 0.08) 1px, transparent 1px);
-    background-size: 56px 56px;
-    mask-image: linear-gradient(180deg, rgba(15, 23, 42, 0.2), transparent 76%);
   }
 
   .panel-elevated {

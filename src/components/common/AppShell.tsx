@@ -20,8 +20,6 @@ export function AppShell({
 }: AppShellProps) {
   return (
     <div className="page-shell min-h-screen text-ink">
-      <div className="hero-orb hero-orb-red absolute left-[-8rem] top-[-4rem] h-72 w-72" />
-      <div className="hero-orb hero-orb-blue absolute right-[-7rem] top-20 h-80 w-80" />
       <div className="mx-auto flex min-h-screen max-w-7xl flex-col gap-5 px-4 py-6 sm:gap-6 sm:px-6 sm:py-8 lg:px-10">
         {/* Event masthead — centered, consistent size on every page (per the
             DIGICON reference, the brand sits top-center above all content). */}
