@@ -205,7 +205,7 @@ export default function PlayPage() {
               <img
                 src={activeQuestion.imageUrl}
                 alt={activeQuestion.text}
-                className="mx-auto h-auto max-h-[55vh] w-full object-contain md:max-h-[420px]"
+                className="block h-auto w-full object-contain md:max-h-[460px]"
               />
             </div>
           ) : null}
