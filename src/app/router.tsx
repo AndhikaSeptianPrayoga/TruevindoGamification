@@ -12,6 +12,8 @@ import PlayPage from '@/pages/PlayPage'
 import QuizEditorPage from '@/pages/QuizEditorPage'
 import QuizListPage from '@/pages/QuizListPage'
 import ResultPage from '@/pages/ResultPage'
+import WheelHostPage from '@/pages/WheelHostPage'
+import WheelJoinPage from '@/pages/WheelJoinPage'
 
 export function AppRouter() {
   return (
@@ -24,7 +26,16 @@ export function AppRouter() {
         <Route path="/play/:sessionId" element={<PlayPage />} />
         <Route path="/result/:sessionId" element={<ResultPage />} />
         <Route path="/finished/:sessionId" element={<ParticipantFinishedPage />} />
+        <Route path="/wheel/:wheelId" element={<WheelJoinPage />} />
         <Route path="/admin/login" element={<AdminLoginPage />} />
+        <Route
+          path="/admin/wheel"
+          element={
+            <ProtectedAdminRoute>
+              <WheelHostPage />
+            </ProtectedAdminRoute>
+          }
+        />
         <Route
           path="/admin/quizzes"
           element={

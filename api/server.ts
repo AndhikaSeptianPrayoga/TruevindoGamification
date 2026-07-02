@@ -2,6 +2,7 @@ import { createServer } from 'http'
 import { Server } from 'socket.io'
 import app from './app.js'
 import { registerSessionGateway } from './gateways/session.gateway.js'
+import { registerWheelGateway } from './gateways/wheel.gateway.js'
 import { sessionService } from './modules/sessions/session.service.js'
 
 const PORT = Number(process.env.PORT || 3002)
@@ -14,6 +15,7 @@ const io = new Server(httpServer, {
 })
 
 registerSessionGateway(io)
+registerWheelGateway(io)
 async function bootstrap() {
   const restoredCount = await sessionService.initialize()
 
